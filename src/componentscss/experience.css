@@ -1,0 +1,58 @@
+.experienceContainer {
+    max-width: 1200px; /* Adjust container width */
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+    background-color: #007991;
+  
+    /* Background image and styling */
+    /* background-image: linear-gradient(
+        rgba(255, 255, 255, 0.132),
+        rgba(255, 255, 255, 0.126)
+      ),
+      url("./images/background.jpg"); 
+    background-size: cover; /* Ensure image covers entire container */
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Prevent tiling */
+    background-blend-mode: overlay; 
+  }
+  
+  /* Row styling */
+  .row {
+    display: flex;
+    flex-wrap: wrap; /* Wrap columns on smaller screens */
+    justify-content: space-around;
+  }
+  
+  /* Column styling */
+  .experienceCol {
+    flex: 1 1 30%; /* Flex basis for 3 equal columns */
+    padding: 20px;
+    box-sizing: border-box;
+    margin: 10px;
+  }
+  
+  .experienceCol h2 {
+    font-size: 24px;
+    color: white;
+    margin-bottom: 15px;
+  }
+  
+  .experienceCol p {
+    font-size: 16px;
+    color: rgb(232, 231, 231);
+    line-height: 1.6;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .experienceCol {
+      flex: 1 1 45%; /* Adjust to two columns on medium screens */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .experienceCol {
+      flex: 1 1 100%; /* Stack columns on small screens */
+    }
+  }

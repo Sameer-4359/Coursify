@@ -1,0 +1,96 @@
+.navbarCustom {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out;
+  background-color: #007991;
+  padding: 10px 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbarCustom.show {
+  transform: translateY(0); 
+}
+
+.navbarCustom.hide {
+  transform: translateY(-100%); 
+}
+
+body {
+  padding-top: 70px; 
+}
+
+.navbarBrand {
+    font-family: 'Montserrat', sans-serif;
+    color: #ffffff !important;
+    font-size: 30px !important;
+    font-weight: bold;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  /* Remove list style for nav items */
+.navbar-nav {
+    list-style-type: none;
+    padding-left: 0;
+  }
+
+  /* Navbar toggler styling */
+.navbar-toggler {
+    border-color: #ffffff;
+  }
+
+  /* Navbar toggler icon color */
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='white' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+  }
+  
+  /* Nav item link styling */
+  .nav-link {
+    color: #ffffff !important;
+    font-size: 16px;
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  
+  .nav-link:hover {
+    color: aliceblue !important;
+    font-weight: 700 ;
+  }
+  
+  /* Button styling for Login and Register */
+  .authButton {
+    background-color: #ff9635 !important;
+    color: white;
+    font-weight: bold;
+    margin-left: 10px;
+    border: none;
+    transition: background-color 0.3s;
+  }
+  
+  .authButton:hover {
+    background-color: #ff7b2e !important; 
+    border: #ffffff solid 2px  !important;
+  }
+  
+.searchbar{
+  margin-left: 50px;
+  align-self: left;
+}
+  
+  /* Responsive design adjustments */
+  @media (max-width: 768px) {
+    .navbar-nav {
+      flex-direction: column;
+      align-items: flex-start;
+      width: 100%;
+    }
+  
+    .authButton {
+      width: 100%;
+      margin: 5px 0;
+    }
+  }
+  

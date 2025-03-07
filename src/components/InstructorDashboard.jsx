@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import Menu from "./Menu";
 import InstructorSlider from "./InstructorSlider";
-import Footer from "./Footer.jsx"
+import Footer from "./Footer.jsx";
 import { useNavigate } from "react-router-dom";
+import "../componentscss/instructordashboard.css";
 
-function InstructorDashboard({ instructorId }) {
-  const [courses, setCourses] = useState([]);
+function InstructorDashboard() {
+  const [courses, setCourses] = useState([]); // State for storing courses
   const [summary, setSummary] = useState({
     totalCourses: 0,
     averageRating: 0,
@@ -13,38 +14,72 @@ function InstructorDashboard({ instructorId }) {
     totalEarnings: 0,
   });
 
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // For navigation
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    //alert(token);
+    const instructorId = localStorage.getItem("instructorId");
+
+    if (!token ) {
+      console.log("Unauthorized user - Redirecting to /login");
+      alert("Unauthorized access! Please log in.");
+      window.location.href = "/login";
+      return;
+    }
+
+    console.log("User authenticated with ID:", instructorId);
+
     const fetchData = async () => {
       try {
-        const coursesResponse = await fetch(`/api/instructor/${instructorId}/courses`);
-        const coursesData = await coursesResponse.json();
-        setCourses(coursesData);
+        const response = await fetch(
+          `http://localhost:5000/api/instructor/${instructorId}/courses`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-        const summaryResponse = await fetch(`/api/instructor/${instructorId}/summary`);
-        const summaryData = await summaryResponse.json();
-        setSummary(summaryData);
+        if (!response.ok) {
+          throw new Error("Failed to fetch courses. Redirecting to login.");
+        }
+
+        const data = await response.json();
+        console.log("Fetched data:", data);
+
+        // Update the courses and summary
+        setCourses(data); // Store courses
+        setSummary({
+          totalCourses: data.length,
+          averageRating: 4.5, // Placeholder, replace with actual data if available
+          totalStudents: 100, // Placeholder
+          totalEarnings: 5000, // Placeholder
+        });
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Fetch error:", error);
+        alert("Session expired. Please log in again.");
+        localStorage.removeItem("token");
+        localStorage.removeItem("instructorId");
+        window.location.href = "/login";
       }
     };
 
     fetchData();
-  }, [instructorId]);
+  }, []);
 
   const handleAddCourse = () => {
-    navigate("/add-course");
+    navigate("/addcourse");
   };
 
   return (
+
     <div className="instructorDashboard">
-      <Menu />
+      //<Menu />
 
       {/* Summary Section */}
       <div className="dashboardSummary">
         <h1>Welcome, Instructor!</h1>
-      
         <div className="summaryCards">
           <div className="summaryCard">
             <h2>Total Courses</h2>
@@ -68,7 +103,11 @@ function InstructorDashboard({ instructorId }) {
       {/* Instructor Slider */}
       <div className="coursesSlider">
         <h2>Your Courses</h2>
-        <InstructorSlider courses={courses} />
+        {courses.length > 0 ? (
+          <InstructorSlider courses={courses} /> // Pass courses as props
+        ) : (
+          <p>No courses available. Start adding some!</p>
+        )}
       </div>
 
       {/* Add New Course Button */}
@@ -77,8 +116,11 @@ function InstructorDashboard({ instructorId }) {
           Add New Course
         </button>
       </div>
+
       <Footer />
     </div>
+    
+
   );
 }
 

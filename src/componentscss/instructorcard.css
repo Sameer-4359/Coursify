@@ -1,0 +1,81 @@
+.instructorCard {
+    flex: 0 0 20%; /* Adjust based on the layout */
+    box-sizing: border-box;
+    margin: 15px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .instructorCard:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Image Styling */
+  .cardImg img {
+    width: 90%;
+    height: auto;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+  }
+  
+  .cardImg img:hover {
+    transform: scale(1.05);
+  }
+  
+  /* Content Styling */
+  .cardContent h2 {
+    font-size: 18px;
+    color: #007991;
+    font-weight: 600;
+    margin: 12px 0 5px;
+    text-align: center;
+  }
+  
+  .cardContent p {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 10px;
+    line-height: 1.6;
+    text-align: center;
+  }
+  
+  /* Actions (Buttons) */
+  .cardActions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    gap: 10px;
+  }
+  
+  .cardActions button {
+    padding: 8px 12px;
+    font-size: 14px;
+    background-color: #007991;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    font-weight: 500;
+  }
+  
+  .cardActions button:hover {
+    background-color: #005f6b;
+    transform: translateY(-2px);
+  }
+  
+  .cardActions button:nth-child(3) {
+    background-color: #ff4d4d; /* Red for Delete */
+  }
+  
+  .cardActions button:nth-child(3):hover {
+    background-color: #d93636; /* Darker red */
+  }
+  

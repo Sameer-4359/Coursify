@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import "../../componentscss/checkout.css";
+
 
 const BillingDetails = () => {
   const [billingInfo, setBillingInfo] = useState({

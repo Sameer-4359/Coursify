@@ -1,86 +1,37 @@
-// import React, { useState } from "react";
-// import Card from "./Card";
-// import Items from "../carousel";
-// // import "../../public/styles.css";
-
-// function Slider() {
-//   const [currentIndex, setCurrentIndex] = useState(0);
-
-//   const nextSlide = () => {
-//     setCurrentIndex((prevIndex) => (prevIndex + 1) % Items.length);
-//   };
-
-//   const prevSlide = () => {
-//     setCurrentIndex(
-//       (prevIndex) => (prevIndex - 1 + Items.length) % Items.length
-//     );
-//   };
-
-//   return (
-//     <div className="sliderContainer">
-//       <button className="prevButton" onClick={prevSlide}>
-//         &#10094;
-//       </button>
-
-//       <div
-//         className="sliderTrack"
-//         style={{ transform: `translateX(-${currentIndex * 100}%)` }}
-//       >
-//         {Items.map((item, index) => (
-//           <Card
-//             key={index}
-//             img={item.img}
-//             title={item.title}
-//             instructor={item.instructor}
-//             price={item.price}
-//           />
-//         ))}
-//       </div>
-
-//       <button className="nextButton" onClick={nextSlide}>
-//         &#10095;
-//       </button>
-//     </div>
-//   );
-// }
-
-// export default Slider;
-
-
 import React, { useState, useEffect } from "react";
 import Card from "./Card";
-import Items from "../carousel";
 
-function Slider() {
-  const [currentIndex, setCurrentIndex] = useState(1); // Start at 1 (after the duplicate last slide)
-  const [adjustedItems, setAdjustedItems] = useState([]);
 
-  // Prepare the items with duplicates for infinite scroll
+import "../componentscss/slider.css"
+
+/*function Slider() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [items, setItems] = useState([]);
+
   useEffect(() => {
-    const duplicateItems = [Items[Items.length - 1], ...Items, Items[0]];
-    setAdjustedItems(duplicateItems);
+    // Fetch courses from the backend
+    const fetchCourses = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/courses");
+        const data = await response.json();
+        setItems(data);
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+      }
+    };
+
+    fetchCourses();
   }, []);
 
   const nextSlide = () => {
-    setCurrentIndex((prevIndex) => prevIndex + 1);
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % items.length);
   };
 
   const prevSlide = () => {
-    setCurrentIndex((prevIndex) => prevIndex - 1);
+    setCurrentIndex(
+      (prevIndex) => (prevIndex - 1 + items.length) % items.length
+    );
   };
-
-  // Reset position when reaching the duplicates
-  useEffect(() => {
-    if (currentIndex === adjustedItems.length - 1) {
-      setTimeout(() => {
-        setCurrentIndex(1); // Go to the first actual slide
-      }, 300); // Match the CSS transition time
-    } else if (currentIndex === 0) {
-      setTimeout(() => {
-        setCurrentIndex(adjustedItems.length - 2); // Go to the last actual slide
-      }, 300);
-    }
-  }, [currentIndex, adjustedItems.length]);
 
   return (
     <div className="sliderContainer">
@@ -88,24 +39,19 @@ function Slider() {
         &#10094;
       </button>
 
-      <div
-        className="sliderTrack"
-        style={{
-          display: "flex",
-          transform: `translateX(-${currentIndex * 100}%)`,
-          transition: currentIndex === 0 || currentIndex === adjustedItems.length - 1 ? "none" : "transform 0.5s ease",
-        }}
-      >
-        {adjustedItems.map((item, index) => (
-          <Card
-            key={index}
-            img={item.img}
-            title={item.title}
-            instructor={item.instructor}
-            price={item.price}
-          />
-        ))}
-      </div>
+      <div className="sliderTrack" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
+  {items.map((item, index) => (
+    <Card
+      key={item.id} // Use item.id instead of index for unique keys
+      id={item.id} // Pass the id to the Card component
+      img={item.img} // Make sure item.img exists in your backend response
+      title={item.title} // Make sure item.title exists in your backend response
+      instructor={item.instructor} // Make sure item.instructor exists in your backend response
+      price={`$${item.price}`} // Format the price appropriately
+    />
+  ))}
+</div>
+
 
       <button className="nextButton" onClick={nextSlide}>
         &#10095;
@@ -114,5 +60,73 @@ function Slider() {
   );
 }
 
+export default Slider;*/
+function Slider({ role }) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/courses");
+        const data = await response.json();
+        setItems(data);
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+      }
+    };
+    fetchCourses();
+  }, []);
+
+  const nextSlide = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % items.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + items.length) % items.length);
+  };
+
+
+  /*const handleDelete = async (id) => {
+    if (role !== "admin") return; // Ensure only admins can delete
+
+    try {
+      const token = localStorage.getItem("token");
+      await fetch(`http://localhost:5000/api/courses/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setItems(items.filter((item) => item.id !== id)); // Update state
+    } catch (error) {
+      console.error("Error deleting course:", error);
+    }
+  };*/
+
+  return (
+    <div className="sliderContainer">
+      <button className="prevButton" onClick={prevSlide}>&#10094;</button>
+      <div className="sliderTrack" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
+        {items.map((item) => (
+          <Card
+            key={item.id}
+            id={item.id}
+            img={item.img}
+            title={item.title}
+            instructor={item.instructor}
+            price={`$${item.price}`}
+            role={role} // Pass role to Card
+          />
+        ))}
+      </div>
+      <button className="nextButton" onClick={nextSlide}>&#10095;</button>
+    </div>
+  );
+}
+
 export default Slider;
+
+
+
 

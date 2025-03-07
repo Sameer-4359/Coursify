@@ -1,0 +1,154 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Roboto", sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+  }
+  
+  .studentDashboard {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  .dashboardWelcome {
+    text-align: center;
+    padding: 30px 20px;
+    background: linear-gradient(135deg, #007991, #75d9ec);
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .dashboardWelcome h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+  }
+  
+  .dashboardWelcome p {
+    font-size: 1.2rem;
+    margin-top: 0;
+  }
+  
+  .dashboardSummary {
+    padding: 20px;
+    background: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    max-width: 1200px;
+    border-radius: 10px;
+  }
+  
+  .summaryCards {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .summaryCard {
+    flex: 1 1 200px;
+    background: #f1f8e9;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .summaryCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .summaryCard h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #007991;
+  }
+  
+  .summaryCard p {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+  
+  /* Sliders Section */
+  .dashboardSliders {
+    padding: 20px;
+    background: #fafafa;
+    margin: 20px auto;
+    max-width: 1200px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .sliderSection {
+    margin-bottom: 30px;
+  }
+  
+  .sliderSection h2 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    color: #333;
+    border-bottom: 2px solid #007991;
+    display: inline-block;
+    padding-bottom: 5px;
+  }
+  
+  /* Feedback Section */
+  .feedbackSection {
+    text-align: center;
+    padding: 30px;
+    background: #e8f5e9;
+    border-radius: 10px;
+    margin: 20px auto;
+    max-width: 800px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .feedbackSection h2 {
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .feedbackButton {
+    padding: 10px 20px;
+    font-size: 1.1rem;
+    background-color: #ff9635;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .feedbackButton:hover {
+    background-color: #ff7b2e;
+    transform: translateY(-2px);
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .dashboardWelcome h1 {
+      font-size: 2rem;
+    }
+  
+    .summaryCards {
+      flex-direction: column;
+    }
+  
+    .summaryCard {
+      margin-bottom: 20px;
+    }
+  
+    .dashboardSliders,
+    .dashboardSummary {
+      padding: 15px;
+    }
+  
+    .feedbackSection {
+      padding: 20px;
+    }
+  }
+  

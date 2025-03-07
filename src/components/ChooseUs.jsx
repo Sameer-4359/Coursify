@@ -1,4 +1,6 @@
 import React from "react";
+import "../componentscss/chooseus.css";
+
 
 function ChooseUs() {
   return (

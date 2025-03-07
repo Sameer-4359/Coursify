@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
+
 function StudentCard({ id, img, title, instructor }) {
   const navigate = useNavigate();
 
@@ -8,9 +9,34 @@ function StudentCard({ id, img, title, instructor }) {
     navigate(`/course-details/${id}`);
   };
 
-  const handleUnenroll = () => {
-    // Add logic to unenroll from the course
-    console.log(`Unenrolled from course ID: ${id}`);
+  const handleUnenroll = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        console.error("No authentication token found!");
+        return;
+      }
+
+      const response = await fetch(`http://localhost:5000/api/checkout/unenroll/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        console.log(`Successfully unenrolled from course ID: ${id}`);
+        // Optionally refresh the list of courses or notify the parent component
+        window.location.reload(); // Reload to update the list of enrolled courses
+      } else {
+        const errorData = await response.json();
+        console.error("Error:", errorData.error);
+      }
+    } catch (error) {
+      console.error("Error during unenrollment:", error);
+      alert("Error during unenrollment:", error);
+    }
   };
 
   return (

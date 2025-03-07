@@ -1,0 +1,40 @@
+/* General styles for the Home component */
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  color: #333;
+  background-color: #f9f9f9;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  gap: 40px; /* Add spacing between sections */
+  margin: 20px auto;
+  max-width: 1200px;
+  padding: 0 20px;
+}
+
+section {
+  padding: 40px 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  main {
+    padding: 10px;
+  }
+
+  section {
+    padding: 20px;
+  }
+
+  .experience h2,
+  .community h2 {
+    font-size: 24px;
+  }
+}
+  

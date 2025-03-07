@@ -1,55 +1,74 @@
 import React, { useState, useEffect } from "react";
 import StudentCard from "./StudentCard";
-import sampleData from "../carousel"; // Replace with your data source
+import axios from "axios";
+
+
+import "../componentscss/slider.css";
 
 function StudentSlider() {
-  const [currentIndex, setCurrentIndex] = useState(1); // Start at 1 (after duplicate last slide)
-  const [adjustedData, setAdjustedData] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(0); // Start with the first course
+  const [enrolledCourses, setEnrolledCourses] = useState([]); // Store enrolled courses
 
   useEffect(() => {
-    const duplicateData = [sampleData[sampleData.length - 1], ...sampleData, sampleData[0]];
-    setAdjustedData(duplicateData);
+    // Fetch enrolled courses for the logged-in student
+    const fetchEnrolledCourses = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          console.error("No authentication token found!");
+          return;
+        }
+
+        const response = await axios.get("http://localhost:5000/api/checkout/enrolled-courses", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        setEnrolledCourses(response.data);
+      } catch (error) {
+        console.error("Error fetching enrolled courses:", error);
+      }
+    };
+
+    fetchEnrolledCourses();
   }, []);
 
   const nextSlide = () => {
-    setCurrentIndex((prevIndex) => prevIndex + 1);
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % enrolledCourses.length);
   };
 
   const prevSlide = () => {
-    setCurrentIndex((prevIndex) => prevIndex - 1);
+    setCurrentIndex(
+      (prevIndex) => (prevIndex - 1 + enrolledCourses.length) % enrolledCourses.length
+    );
   };
 
-  useEffect(() => {
-    if (currentIndex === adjustedData.length - 1) {
-      setTimeout(() => setCurrentIndex(1), 300); // Match the CSS transition time
-    } else if (currentIndex === 0) {
-      setTimeout(() => setCurrentIndex(adjustedData.length - 2), 300);
-    }
-  }, [currentIndex, adjustedData.length]);
+  if (enrolledCourses.length === 0) {
+    return <p>No enrolled courses to display.</p>;
+  }
 
   return (
     <div className="studentSliderContainer">
       <button className="sliderPrevButton" onClick={prevSlide}>
         &#10094;
       </button>
+
       <div
         className="sliderTrack"
-        style={{
-          display: "flex",
-          transform: `translateX(-${currentIndex * 100}%)`,
-          transition: currentIndex === 0 || currentIndex === adjustedData.length - 1 ? "none" : "transform 0.5s ease",
-        }}
+        style={{ transform: `translateX(-${currentIndex * 100}%)`, display: "flex", transition: "transform 0.5s ease" }}
       >
-        {adjustedData.map((course, index) => (
+        {enrolledCourses.map((course) => (
           <StudentCard
-            key={index}
+            key={course.id}
             id={course.id}
             title={course.title}
-            img={course.img}
+            img={course.image_url} // Update field name if different in API response
             instructor={course.instructor}
           />
         ))}
       </div>
+
       <button className="sliderNextButton" onClick={nextSlide}>
         &#10095;
       </button>

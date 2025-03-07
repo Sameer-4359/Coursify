@@ -60,34 +60,32 @@ form p {
     color: rgb(210, 207, 223);
     text-decoration: underline;
   }
+  form select {
+    color: whitesmoke;
+    border: 1px solid #fcfcfc66;
+    background-color: rgba(252, 252, 252, 0.61);
+    max-width: 250px;
+    border-radius: 3px;
+    padding: 10px 15px;
+    margin: 0 auto 10px auto;
+    display: block;
+    text-align: left;
+    font-size: 15px;
+    font-weight: 300;
+    cursor: pointer;
+  }
+  
+  form select:hover {
+    background-color: #ff9635;
+    color: whitesmoke;
+    border: 1px solid #ff9635;
+  }
+  
+  form select:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 121, 145, 0.8);
+  }
 }
-
-form select {
-  color: whitesmoke;
-  border: 1px solid #fcfcfc66;
-  background-color: rgba(252, 252, 252, 0.61);
-  max-width: 250px;
-  border-radius: 3px;
-  padding: 10px 15px;
-  margin: 0 auto 10px auto;
-  display: block;
-  text-align: left;
-  font-size: 15px;
-  font-weight: 300;
-  cursor: pointer;
-}
-
-form select:hover {
-  background-color: #ff9635;
-  color: whitesmoke;
-  border: 1px solid #ff9635;
-}
-
-form select:focus {
-  outline: none;
-  box-shadow: 0 0 5px rgba(0, 121, 145, 0.8);
-}
-
 
 /* src/components/ContactPage */
 
@@ -220,14 +218,14 @@ form select:focus {
 Sameer ka */
 
 
-/* .App {
-  font-family: sans-serif; */
+.App {
+  /* font-family: sans-serif; */
   /* text-align: center; */
   /* margin: 3%; */
   /* padding: 0; */
   /* box-sizing: border-box; */
-  /* background-color: #c7c3c3;
-} */
+  /* background-color: #c7c3c3; */
+}
 
 /* footer styling */
 
@@ -959,8 +957,6 @@ Sameer ka */
   }
 }
 
-
-/* add course */
 .course-creation-container {
   text-align: center;
   width: auto;
@@ -1025,9 +1021,7 @@ Sameer ka */
 .submit-course-button:hover {
   background-color: #007991;
 }
-
-
-/* instructor card */
+ /* instructor card */
 
 /* Card Container */
 .instructorCard {
@@ -1347,7 +1341,6 @@ Sameer ka */
     font-size: 16px;
   }
 }
-
 /* studentslider and student card */
 
 .studentSliderContainer {
@@ -1550,71 +1543,6 @@ Sameer ka */
 .feedbackButton:hover {
   background-color: #005f6f;
 }
-
-
-
-/* cart page  */
-
-/* General Styling */
-.cartPage {
-  display: flex;
-  justify-content: space-between;
-  margin: 20px auto;
-  max-width: 1200px;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* Cart Courses Section */
-.cartCourses {
-  flex: 2;
-  padding: 20px;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.cartCourses h2 {
-  color: #007991;
-  margin-bottom: 20px;
-}
-
-.courseItem {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 0;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.courseDetails h3 {
-  margin: 0;
-  font-size: 18px;
-  color: #333;
-}
-
-.courseDetails p {
-  margin: 5px 0;
-  font-size: 14px;
-  color: #555;
-}
-
-.removeButton {
-  background-color: #ff4d4d;
-  color: white;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.removeButton:hover {
-  background-color: #d93636;
-}
-
 /* Cart Summary Section */
 .cartSummary {
   flex: 1;
@@ -1652,4 +1580,187 @@ Sameer ka */
   background-color: #005f6b;
 }
 
+/* certificate */
+/* Certificate Styling */
+.certificate {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
+  background-color: #f9f9f9;
+  padding: 0;
+  margin: 0;
+}
 
+
+.certificateBorder {
+  width: 80%;
+  padding: 30px;
+  border: 10px solid #007991;
+  border-radius: 15px;
+  background: white;
+  text-align: center;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+
+.certificateTitle {
+  font-size: 32px;
+  font-weight: bold;
+  color: #007991;
+  margin-bottom: 20px;
+}
+
+
+.certificateContent {
+  font-size: 18px;
+  margin: 10px 0;
+  color: #333;
+}
+
+
+.studentName,
+.courseName {
+  font-size: 24px;
+  font-weight: bold;
+  color: #555;
+}
+
+
+.signatureSection {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+
+
+.signature {
+  text-align: center;
+  font-size: 16px;
+}
+
+
+.signature span {
+  display: block;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+
+.printSection {
+  margin-top: 20px;
+  text-align: center;
+}
+
+
+.printButton {
+  background-color: #007991;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+
+.printButton:hover {
+  background-color: #005f6a;
+}
+
+
+/* Ensure the certificate fits perfectly for printing */
+@media print {
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+
+  .certificate {
+    width: 100%;
+    height: 100%;
+  }
+
+
+  .printSection {
+    display: none; /* Hide print button during print */
+  }
+}
+
+/* AdminDashboard Styling */
+.adminDashboard {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+}
+
+
+/* Summary Section */
+.dashboardSummary {
+  text-align: center;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #f4f9fc;
+  border-radius: 10px;
+  max-width: 900px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+.dashboardSummary h1 {
+  font-size: 28px;
+  color: #007991;
+  margin-bottom: 20px;
+}
+
+
+.summaryCards {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+
+.summaryCard {
+  text-align: center;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 200px;
+}
+
+
+.summaryCard h2 {
+  font-size: 18px;
+  color: #007991;
+  margin-bottom: 10px;
+}
+
+
+.summaryCard p {
+  font-size: 16px;
+  color: #555;
+}
+
+
+/* Slider Section */
+.dashboardSliders {
+  margin: 20px auto;
+}
+
+
+.sliderSection {
+  margin-bottom: 20px;
+}
+
+
+.sliderSection h2 {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 10px;
+}

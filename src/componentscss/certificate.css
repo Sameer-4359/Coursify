@@ -1,0 +1,99 @@
+.certificate {    
+width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 10px solid #007991; /* Border with primary theme color */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    font-family: 'Georgia', serif; /* Elegant font for certificates */
+    text-align: center;
+  }
+ 
+  .certificateBorder {
+    border: 5px solid #ffffff;
+    padding: 20px;
+    background-color: #ffffff;
+  }
+ 
+  .certificateTitle {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #007991;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+ 
+  .certificateContent {
+    font-size: 1.2rem;
+    color: #555555;
+    margin: 10px 0;
+  }
+ 
+  .studentName {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333333;
+    margin: 10px 0;
+  }
+ 
+  .courseName {
+    font-size: 1.5rem;
+    font-style: italic;
+    color: #007991;
+    margin: 10px 0;
+  }
+ 
+  .signatureSection {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 40px;
+  }
+ 
+  .signature {
+    text-align: center;
+    font-size: 1rem;
+  }
+ 
+  .signature p {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333333;
+  }
+ 
+  .signature span {
+    display: block;
+    width: 150px;
+    border-top: 1px solid #333333;
+    margin: 0 auto;
+  }
+ 
+  .generateButton {
+    display: block;
+    margin: 30px auto;
+    padding: 10px 20px;
+    background-color: #007991;
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s;
+  }
+ 
+  .generateButton:hover {
+    background-color: #005f73;
+  }
+ 
+  a {
+    color: #007991;
+    text-decoration: none;
+    font-weight: bold;
+  }
+ 
+  a:hover {
+    text-decoration: underline;
+  }
+ 

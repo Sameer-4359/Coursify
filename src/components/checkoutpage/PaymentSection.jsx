@@ -1,4 +1,9 @@
 import React, { useState } from "react";
+import "../../componentscss/checkout.css";
+
+
+
+
 
 const PaymentSection = ({ totalPrice, onCheckout }) => {
   const [paymentMethod, setPaymentMethod] = useState("Credit Card");

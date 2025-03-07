@@ -1,0 +1,67 @@
+.ChooseUsContainer {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f4f4f4; /* Light grey background */
+    color: #333; /* Default text color */
+  }
+  
+  /* Row styling for desktop */
+  .ChooseUsRow {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+  }
+  
+  /* Column styling */
+  .ChooseUsCol {
+    flex: 1 1 45%;
+    padding: 20px;
+    background-color: #ffffff; /* White background for columns */
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Heading styling */
+  .ChooseUsCol h2 {
+    font-size: 24px;
+    color: black; /* Black text for headings */
+    margin-bottom: 15px;
+  }
+  
+  /* Paragraph styling */
+  .ChooseUsCol p {
+    font-size: 16px;
+    color: #555; /* Dark grey color for paragraphs */
+    line-height: 1.6;
+  }
+  
+  /* List styling */
+  .ChooseUsCol ul {
+    list-style-type: none; /* Remove default list style */
+    padding-left: 0;
+  }
+  
+  .ChooseUsCol li {
+    margin-bottom: 20px;
+  }
+  
+  .ChooseUsCol li::before {
+    content: "•"; /* Use a bullet point */
+    color: #ff9635; /* Orange color for list dots */
+    font-size: 24px;
+    margin-right: 10px;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .ChooseUsRow {
+      flex-direction: column; /* Stack columns on top of each other */
+      gap: 0;
+    }
+  
+    .ChooseUsCol {
+      flex: 1 1 100%; /* Full width for smaller screens */
+      margin-bottom: 20px; /* Add spacing between stacked columns */
+    }
+  }

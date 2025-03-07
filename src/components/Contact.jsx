@@ -1,8 +1,20 @@
 import React from "react";
+import Menu from "./Menu";
+import Footer from "./Footer";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faFacebook,
+  faTwitter,
+  faInstagram,
+} from "@fortawesome/free-brands-svg-icons";
+import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import "../componentscss/contact.css";
+
 
 function ContactPage() {
   return (
     <div className="contactPage">
+      <header><Menu /></header>
       <div className="headerSection">
         <h1>Get in Touch</h1>
         <p>
@@ -24,13 +36,35 @@ function ContactPage() {
               <i className="fas fa-phone"></i> +92 3220212783
             </p>
           </div>
-          <h4>Keep in Touch</h4>
-          <div className="socialIcons">
-            <i className="fab fa-facebook-f"></i>
-            <i className="fab fa-twitter"></i>
-            <i className="fab fa-pinterest"></i>
-            <i className="fab fa-youtube"></i>
-          </div>
+          <h3>Keep in Touch</h3>
+          <div className="socialLinks">
+              <a
+                href="https://facebook.com"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FontAwesomeIcon icon={faFacebook} size="2x" />
+              </a>
+              <a
+                href="https://instagram.com"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FontAwesomeIcon icon={faInstagram} size="2x" />
+              </a>
+              <a href="mailto:info@example.com">
+                <FontAwesomeIcon icon={faEnvelope} size="2x" />
+              </a>
+
+
+              <a
+                href="https://twitter.com"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <FontAwesomeIcon icon={faTwitter} size="2x" />
+              </a>
+            </div>
           <div className="map">
             <iframe
               title="Google Maps"
@@ -57,8 +91,13 @@ function ContactPage() {
           </form>
         </div>
       </div>
+      <footer><Footer /></footer>
     </div>
   );
 }
 
+
 export default ContactPage;
+
+
+

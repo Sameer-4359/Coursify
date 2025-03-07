@@ -1,14 +1,19 @@
 import React, { useState } from "react";
+import "../componentscss/addcourse.css";
+import Menu from "./Menu";
+import Footer from "./Footer";
 
 const CourseCreation = () => {
   const [courseDetails, setCourseDetails] = useState({
     title: "",
-    instructor: "",
     price: "",
     description: "",
     imageUrl: "",
     modules: [{ title: "", lessons: [""] }],
   });
+
+  // Assuming instructorId is available (e.g., from localStorage or context)
+  const instructorId = "instructor123"; // Replace with actual method of getting instructor ID from authentication
 
   // Handle form input changes
   const handleChange = (event) => {
@@ -56,33 +61,54 @@ const CourseCreation = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("Course Details Submitted: ", courseDetails);
+
+    // Basic validation before sending to backend
+    if (!courseDetails.title || !courseDetails.price || !courseDetails.modules.length) {
+      alert("Title, price, and at least one module are required.");
+      return;
+    }
+
+    const courseData = {
+      title: courseDetails.title,
+      price: courseDetails.price,
+      description: courseDetails.description,
+      imageUrl: courseDetails.imageUrl,
+      modules: courseDetails.modules,
+    };
+
     // Add logic to send data to the backend
-    fetch("http://localhost:5000/api/courses", {
+    fetch(`http://localhost:5000/api/instructor/${instructorId}/courses`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(courseDetails),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem("token")}`, // Assuming JWT token is stored in localStorage
+      },
+      body: JSON.stringify(courseData),
     })
-      .then((response) => {
-        if (response.ok) {
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.message === "Course added successfully") {
           alert("Course successfully created!");
-          // Optionally clear the form
           setCourseDetails({
             title: "",
-            instructor: "",
             price: "",
             description: "",
             imageUrl: "",
             modules: [{ title: "", lessons: [""] }],
           });
         } else {
-          response.json().then((data) => alert(data.message || "Failed to create course"));
+          alert(data.message || "Failed to create course");
         }
       })
-      .catch((error) => alert("Error submitting course: " + error.message));
+      .catch((error) => {
+        alert("Error submitting course: " + error.message);
+      });
   };
 
   return (
+    <div>
+     <header><Menu /></header>
+
     <div className="course-creation-container">
       <h2>Create a New Course</h2>
       <form onSubmit={handleSubmit} className="course-creation-form">
@@ -91,14 +117,6 @@ const CourseCreation = () => {
           name="title"
           placeholder="Course Title"
           value={courseDetails.title}
-          onChange={handleChange}
-          className="course-input"
-        />
-        <input
-          type="text"
-          name="instructor"
-          placeholder="Instructor Name"
-          value={courseDetails.instructor}
           onChange={handleChange}
           className="course-input"
         />
@@ -167,6 +185,9 @@ const CourseCreation = () => {
         </button>
       </form>
     </div>
+    <footer><Footer /></footer>
+      </div>
+
   );
 };
 

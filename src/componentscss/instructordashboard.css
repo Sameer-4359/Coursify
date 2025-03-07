@@ -1,0 +1,140 @@
+body {
+  font-family: "Roboto", sans-serif;
+  background-color: #f4f6f9;
+  color: #333;
+}
+  
+.instructorDashboard {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 20px;
+  background: #f9fafb;
+}
+
+.dashboardSummary {
+  background: #ffffff;
+  padding: 30px;
+  margin-top: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dashboardSummary h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #007991;
+}
+
+.summaryCards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.summaryCard {
+  background-color: #f1f8e9;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.summaryCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+}
+
+.summaryCard h2 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.summaryCard p {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #007991;
+}
+
+.coursesSlider {
+  margin-top: 40px;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.coursesSlider h2 {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.coursesSlider p {
+  font-size: 1.2rem;
+  color: #555;
+}
+
+.addCourseButtonContainer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 30px;
+}
+
+.addCourseButton {
+  background: #ff9635;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.addCourseButton:hover {
+  background: #ff7b2e;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .summaryCards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .summaryCard {
+    padding: 15px;
+  }
+
+  .coursesSlider {
+    padding: 15px;
+  }
+
+  .addCourseButton {
+    font-size: 1rem;
+    padding: 10px 15px;
+  }
+
+  .menu {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .summaryCards {
+    grid-template-columns: 1fr;
+  }
+
+  .summaryCard {
+    padding: 10px;
+  }
+
+  .addCourseButtonContainer {
+    justify-content: center;
+    margin-top: 20px;
+  }
+}

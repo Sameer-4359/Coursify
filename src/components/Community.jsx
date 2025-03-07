@@ -1,11 +1,35 @@
 import React, { useState } from "react";
+import "../componentscss/community.css";
+
 
 function Community() {
   const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
 
   function saveState(event) {
-    var newEmail = event.target.value;
-    setEmail(newEmail);
+    setEmail(event.target.value);
+  }
+
+  async function handleSubscribe() {
+    try {
+      const response = await fetch("http://localhost:5000/api/community/subscribe", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        setMessage(data.message);
+      } else {
+        setMessage(data.message || "Failed to subscribe.");
+      }
+    } catch (error) {
+      console.error("Error during subscription:", error);
+      setMessage("An error occurred. Please try again.");
+    }
   }
 
   return (
@@ -14,7 +38,7 @@ function Community() {
         <h2>Join our Community</h2>
         <p>
           Enter your email address to register to our newsletter subscription
-          delivered on regular basis!
+          delivered on a regular basis!
         </p>
         <input
           onChange={saveState}
@@ -22,7 +46,8 @@ function Community() {
           value={email}
           placeholder="Enter your email"
         />
-        <button>Subscribe</button>
+        <button onClick={handleSubscribe}>Subscribe</button>
+        <p>{message}</p>
         <hr />
       </div>
     </div>
