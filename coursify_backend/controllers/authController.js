@@ -135,52 +135,57 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 // User Registration
+// User Registration
 async function registerUser(req, res) {
-    const { username, email, password, role } = req.body;
+  const { username, email, password, role } = req.body;
 
-    try {
-        // Validate role
-        if (!["Student", "Instructor", "Admin"].includes(role)) {
-            return res.status(400).json({ message: "Invalid role. Must be 'Student', 'Instructor', or 'Admin'." });
-        }
+  try {
+      // Validate role
+      if (!["Student", "Instructor", "Admin"].includes(role)) {
+          return res.status(400).json({ message: "Invalid role. Must be 'Student', 'Instructor', or 'Admin'." });
+      }
 
-        // Check if the email is already in use in all tables
-        const emailExistsInStudents = await pool.query("SELECT * FROM students WHERE email = $1", [email]);
-        const emailExistsInInstructors = await pool.query("SELECT * FROM instructors WHERE email = $1", [email]);
-        const emailExistsInAdmins = await pool.query("SELECT * FROM admins WHERE email = $1", [email]);
+      // Check if the email is already in use
+      const emailExists = await Promise.all([
+          pool.query("SELECT * FROM students WHERE email = $1", [email]),
+          pool.query("SELECT * FROM instructors WHERE email = $1", [email]),
+          pool.query("SELECT * FROM admins WHERE email = $1", [email])
+      ]);
 
-        if (
-            emailExistsInStudents.rows.length > 0 ||
-            emailExistsInInstructors.rows.length > 0 ||
-            emailExistsInAdmins.rows.length > 0
-        ) {
-            return res.status(400).json({ message: "Email already in use." });
-        }
+      if (emailExists.some(result => result.rows.length > 0)) {
+          return res.status(400).json({ message: "Email already in use." });
+      }
 
-        // Hash the password
-        const hashedPassword = await bcrypt.hash(password, 10);
+      // Hash the password
+      const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Insert data into the respective table
-        let query = "";
-        if (role === "Student") {
-            query = "INSERT INTO students (username, email, password) VALUES ($1, $2, $3) RETURNING *";
-        } else if (role === "Instructor") {
-            query = "INSERT INTO instructors (username, email, password) VALUES ($1, $2, $3) RETURNING *";
-        } else if (role === "Admin") {
-            query = "INSERT INTO admins (username, email, password, role) VALUES ($1, $2, $3, $4) RETURNING *";
-        }
+      // Prepare query & values dynamically
+      let query = "";
+      let values = [username, email, hashedPassword];
 
-        const newUser = await pool.query(query, [username, email, hashedPassword, role]);
+      if (role === "Admin") {
+          query = "INSERT INTO admins (username, email, password, role) VALUES ($1, $2, $3, $4) RETURNING *";
+          values.push(role);
+      } else if (role === "Student") {
+          query = "INSERT INTO students (username, email, password) VALUES ($1, $2, $3) RETURNING *";
+      } else if (role === "Instructor") {
+          query = "INSERT INTO instructors (username, email, password) VALUES ($1, $2, $3) RETURNING *";
+      }
 
-        res.status(201).json({
-            message: `User registered successfully as a ${role}`,
-            user: newUser.rows[0],
-        });
-    } catch (err) {
-        console.error("Error registering user:", err.message);
-        res.status(500).json({ message: "Server error", error: err.message });
-    }
+      // Insert user
+      const newUser = await pool.query(query, values);
+
+      res.status(201).json({
+          message: `User registered successfully as a ${role}`,
+          user: newUser.rows[0],
+      });
+
+  } catch (err) {
+      console.error("Error registering user:", err.message);
+      res.status(500).json({ message: "Server error", error: err.message });
+  }
 }
+
 
 
 //user login

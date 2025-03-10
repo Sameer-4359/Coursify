@@ -125,7 +125,7 @@ function Menu() {
             <Nav.Link href="#about-us" className="nav-link">
               About Us
             </Nav.Link>
-            <Nav.Link href="#contact-us" className="nav-link">
+            <Nav.Link href="/contact" className="nav-link">
               Contact Us
             </Nav.Link>
             <Button href="/login" className="authButton">
