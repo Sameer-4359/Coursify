@@ -348,6 +348,8 @@ const CourseDetails = () => {
   const [error, setError] = useState(null);
   const [completedLessons, setCompletedLessons] = useState({});
   const [reviewInput, setReviewInput] = useState({ rating: "", text: "" });
+  const [isEnrolled, setIsEnrolled] = useState(false);
+  const [userRole, setUserRole] = useState(""); // Get role from auth context
 
   
   const role = localStorage.getItem("role"); // Fetch the role from localStorage or API
@@ -403,6 +405,34 @@ const CourseDetails = () => {
       return updated;
     });
   };
+
+  //check if student is enrolled in a course
+   
+  useEffect(() => {
+    async function checkEnrollment() {
+      try {
+        const response = await fetch(`http://localhost:5000/api/courses/${courseId}/enrollment-status`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`, // Include token if needed
+          },
+        });
+
+        const data = await response.json();
+        if (data.enrolled) {
+          setIsEnrolled(true);
+        }
+      } catch (error) {
+        console.error("Error checking enrollment status:", error);
+      }
+    }
+
+    checkEnrollment();
+  }, [courseId]);
+
+
+
 
   // Check if a module is completed
   const isModuleCompleted = (module) => {
@@ -512,7 +542,7 @@ const CourseDetails = () => {
           <p className="course-instructor">Instructor: {course.instructorName}</p>
           <p className="course-price">Price: ${course.price}</p>
           {/* Add to Cart Button with onClick handler */}
-    {role === "Student" && (
+    {!isEnrolled && role === "Student" && (
      <button className="add-to-cart-button" onClick={() => handleAddCourse(courseId)}>
       Add to Cart
     </button>
@@ -593,7 +623,7 @@ const CourseDetails = () => {
 
       {/* Review Submission Section */}
       {/* Review Submission Section */}
-{role === "Student" && (
+{isEnrolled && role === "Student" && (
   <div className="submit-review">
     <h3>Leave a Review</h3>
     <form onSubmit={handleReviewSubmit}>

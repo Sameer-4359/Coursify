@@ -122,7 +122,7 @@ function Menu() {
             <Nav.Link href="/courses" className="nav-link">
               Courses
             </Nav.Link>
-            <Nav.Link href="#about-us" className="nav-link">
+            <Nav.Link href="/about-us" className="nav-link">
               About Us
             </Nav.Link>
             <Nav.Link href="/contact" className="nav-link">

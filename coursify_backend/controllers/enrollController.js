@@ -183,7 +183,34 @@ const getEnrolledCourses = async (req, res) => {
     }
 };
 
+// Check if a student is enrolled in a specific course
+const checkEnrollmentStatus = async (req, res) => {
+  const { studentId } = req;
+  const { courseId } = req.params; // Get course ID from request params
+
+  console.log("Student ID:", req.studentId);
+  console.log("Course ID:", req.params.courseId);
+
+  try {
+      const result = await pool.query(
+          "SELECT 1 FROM enrollments WHERE student_id = $1 AND course_id = $2",
+          [studentId, courseId]
+      );
+
+      if (result.rowCount > 0) {
+          return res.json({ enrolled: true });
+      } else {
+          return res.json({ enrolled: false });
+      }
+  } catch (error) {
+      console.error("Error checking enrollment status:", error);
+      res.status(500).json({ error: "Failed to check enrollment status" });
+  }
+};
+
+
+
 
   
-  module.exports = { getCartItems, enrollCourses, getEnrolledCourses ,unenrollCourse, getEnrolledCoursesCount, updateCourse};
+  module.exports = { getCartItems, enrollCourses, getEnrolledCourses ,unenrollCourse, getEnrolledCoursesCount, updateCourse , checkEnrollmentStatus};
   

@@ -1,6 +1,6 @@
 const express = require("express");
 const authenticateStudent = require("../middleware/authenticateStudent");
-const { getCartItems, enrollCourses,getEnrolledCourses ,unenrollCourse, getEnrolledCoursesCount,updateCourse} = require("../controllers/enrollController");
+const { getCartItems, enrollCourses,getEnrolledCourses ,unenrollCourse, getEnrolledCoursesCount,updateCourse,checkEnrollmentStatus} = require("../controllers/enrollController");
 
 const router = express.Router();
 
@@ -22,6 +22,8 @@ router.delete("/unenroll/:courseId", unenrollCourse);
 router.get("/count", getEnrolledCoursesCount);
 
 router.put("/unenroll/:courseId", updateCourse);
+
+// router.get("/courses/:courseId/enrollment-status", authenticateStudent, checkEnrollmentStatus);
 
 module.exports = router;
 
