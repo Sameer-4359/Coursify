@@ -29,7 +29,7 @@ function Login() {
     }
 
     // Send login request to the backend
-    fetch("http://localhost:5000/api/auth/login", { // Corrected URL
+    fetch("http://localhost:5000/api/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../componentscss/community.css";
 
 
 function Community() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const navigate = useNavigate(); 
 
   function saveState(event) {
     setEmail(event.target.value);
@@ -47,6 +49,9 @@ function Community() {
           placeholder="Enter your email"
         />
         <button onClick={handleSubscribe}>Subscribe</button>
+        <button className="about-us-btn" onClick={() => navigate("/aboutus")}>
+                    About Us
+                </button>
         <p>{message}</p>
         <hr />
       </div>
