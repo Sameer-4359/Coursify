@@ -66,6 +66,34 @@ const UpdateCourse = () => {
       modules: updatedModules,
     }));
   };
+
+  // //handle video upload 
+  // const handleVideoUpload = (moduleIndex, lessonIndex, file) => {
+  //   const updatedModules = [...courseDetails.modules];
+  //   updatedModules[moduleIndex].lessons[lessonIndex].video = file;
+  //   setCourseDetails((prevDetails) => ({
+  //     ...prevDetails,
+  //     modules: updatedModules,
+  //   }));
+  // };
+
+  const handleVideoUpload = (moduleIndex, lessonIndex, file) => {
+    setCourseDetails(prevState => {
+        const updatedModules = [...prevState.modules]; // Copy modules array
+        const updatedLessons = [...updatedModules[moduleIndex].lessons]; // Copy lessons array
+
+        // Ensure the lesson object exists properly
+        if (typeof updatedLessons[lessonIndex] !== "object") {
+            updatedLessons[lessonIndex] = { title: updatedLessons[lessonIndex], video: null };
+        }
+
+        updatedLessons[lessonIndex].video = file; // Assign video file correctly
+        updatedModules[moduleIndex] = { ...updatedModules[moduleIndex], lessons: updatedLessons };
+
+        return { ...prevState, modules: updatedModules };
+    });
+};
+
   
 
   // Add a new module
@@ -91,47 +119,94 @@ const UpdateCourse = () => {
 
     const token = localStorage.getItem("token");
     if (!token) {
-      alert("You need to log in to update the course.");
-      return;
+        alert("You need to log in to update the course.");
+        return;
     }
 
+    // Prepare course data payload
     const courseData = {
-      title: courseDetails.title,
-      price: courseDetails.price,
-      description: courseDetails.description,
-      imageUrl: courseDetails.imageUrl,
-      modules: courseDetails.modules,
+        title: courseDetails.title,
+        price: courseDetails.price,
+        description: courseDetails.description,
+        imageUrl: courseDetails.imageUrl,
+        modules: courseDetails.modules.map(module => ({
+            title: module.title,
+            lessons: module.lessons.map(lesson => ({
+                title: lesson.title,
+                video_url: lesson.video_url || null // Ensure video URL is included if it exists
+            }))
+        }))
     };
-    //console.log("Payload sent to the backend:", courseData);
-    console.log("Payload sent to the backend:", courseData.modules);
-
 
     try {
-      const response = await fetch(
-        `http://localhost:5000/api/instructor/courses/${courseId}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // Include token
-          },
-          body: JSON.stringify(courseData),
-        }
-      );
+        // Step 1: Update the course details
+        const response = await fetch(`http://localhost:5000/api/instructor/courses/${courseId}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(courseData),
+        });
 
-      const data = await response.json();
-      if (response.ok) {
+        const data = await response.json();
+        if (!response.ok) {
+            console.error("Error response:", data);
+            alert(data.error || "Failed to update course.");
+            return;
+        }
+
+        console.log("✅ Course updated successfully!", data);
+        
+        // Step 2: Fetch updated lesson IDs after updating the course
+        const lessonsResponse = await fetch(`http://localhost:5000/api/courses/${courseId}/lessons`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        const lessonsWithIds = await lessonsResponse.json();
+        console.log("✅ Fetched updated lesson IDs:", lessonsWithIds);
+
+        // Step 3: Upload videos for lessons that have new video files
+        for (let moduleIndex in courseDetails.modules) {
+            for (let lessonIndex in courseDetails.modules[moduleIndex].lessons) {
+                const lesson = courseDetails.modules[moduleIndex].lessons[lessonIndex];
+
+                if (lesson.video && lesson.video instanceof File) {
+                    // Find correct lessonId based on title
+                    const matchingLesson = lessonsWithIds.find(l => l.title === lesson.title);
+                    if (!matchingLesson) {
+                        console.error("❌ No matching lesson found for:", lesson.title);
+                        continue;
+                    }
+
+                    const formData = new FormData();
+                    formData.append("video", lesson.video);
+                    formData.append("lessonId", matchingLesson.id);
+                    formData.append("courseId", courseId);
+
+                    console.log("✅ Uploading video for lesson ID:", matchingLesson.id);
+
+                    await fetch("http://localhost:5000/api/upload/upload-video", {
+                        method: "POST",
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                        body: formData,
+                    });
+                }
+            }
+        }
+
         alert("Course updated successfully!");
         navigate(`/instructorDashboard`);
-      } else {
-        console.error("Error response:", data);
-        alert(data.error || "Failed to update course.");
-      }
     } catch (error) {
-      console.error("Error during update:", error);
-      alert("An error occurred. Please try again.");
+        console.error("❌ Error updating course:", error);
+        alert("An error occurred. Please try again.");
     }
-  };
+};
+
 
   if (loading) return <div>Loading course details...</div>;
 
@@ -183,22 +258,15 @@ const UpdateCourse = () => {
               />
               <h4>Lessons</h4>
               {module.lessons.map((lesson, lessonIndex) => (
-                <input
-                  key={lessonIndex}
-                  type="text"
-                  placeholder={`Lesson ${lessonIndex + 1}`}
-                  value={lesson} // `lesson` is a string
-                  onChange={(e) =>
-                    handleLessonChange(moduleIndex, lessonIndex, e.target.value)
-                  }
-                  className="lesson-input"
-                />
-              ))}
+                  <div key={lessonIndex} className="lesson-block">
+                    <input type="text" placeholder={`Lesson ${lessonIndex + 1}`} value={lesson.title} onChange={(e) => handleLessonChange(moduleIndex, lessonIndex, e.target.value)} className="lesson-input" />
+                    <input type="file" accept="video/*" onChange={(e) => handleVideoUpload(moduleIndex, lessonIndex, e.target.files[0])} className="video-upload" />
+                  </div>
+                ))}
               <button
                 type="button"
                 onClick={() => addLesson(moduleIndex)}
-                className="add-lesson-button"
-              >
+                className="add-lesson-button">
                 Add Lesson
               </button>
             </div>

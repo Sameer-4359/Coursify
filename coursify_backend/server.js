@@ -11,6 +11,7 @@ const cartRoute = require("./routes/cartRoutes");
 const enrollRoutes = require("./routes/enrollRoutes");
 const adminRoutes = require("./routes/adminRoute");
 const path = require("path");
+const uploadRoutes = require("./routes/uploadRoutes");
 
 
 
@@ -44,6 +45,9 @@ app.use('/api/courses', courseRoutes);
 app.use("/api/cart", cartRoute);
 app.use("/api/checkout", enrollRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/upload", uploadRoutes);
+app.use("/api", require("./routes/lessonRoutes"));
+
 
 // API to save certificate image
 app.post("/api/save-certificate", async (req, res) => {
@@ -81,6 +85,10 @@ app.use("/certificates", express.static(path.join(__dirname, "public", "certific
 app.get("/", (req, res) => {
   res.send("Server is running! Try hitting the API endpoints.");
 });
+
+
+
+
 
 
 
