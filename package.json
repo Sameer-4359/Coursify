@@ -22,8 +22,9 @@
     "react-bootstrap": "^2.10.5",
     "react-dom": "18.3.1",
     "react-router-dom": "6.27.0",
-    "react-scripts": "^5.0.1",
-    "react-select": "^5.8.3"
+    "react-scripts": "^3.0.1",
+    "react-select": "^5.8.3",
+    "swiper": "^11.2.5"
   },
   "devDependencies": {
     "@types/react": "18.2.38",
@@ -31,7 +32,7 @@
     "typescript": "4.4.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "nodemon index.js",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
@@ -41,5 +42,7 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "author": "",
+  "license": "ISC"
 }

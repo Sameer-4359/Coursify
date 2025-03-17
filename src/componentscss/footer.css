@@ -1,6 +1,7 @@
 .footer {
   margin-top: 30px;
-  background-color:aliceblue !important;
+  background-color:#1c1d1f !important;
+  color: white !important;
   padding: 50px 30px !important;
   padding-bottom: 10px !important;
 }
@@ -27,6 +28,7 @@
 
 .footerCol p {
   padding: 10px;
+  color: white;
 }
 
 .footerCol h4 {
@@ -53,7 +55,7 @@
 }
 .footerCol ul li a {
   font-size: 16px;
-  color: black;
+  color: white;
   text-transform: capitalize;
   text-decoration: none;
   display: block;
@@ -62,7 +64,6 @@
 }
 
 .footerCol ul li a:hover {
-  color: white;
   padding-left: 8px;
 }
 
@@ -70,7 +71,6 @@
   display: inline-block;
   height: 40px;
   width: 50px;
-  background-color: black;
   margin: 0 10px 10px 0;
   text-align: center;
   line-height: 40px;
@@ -80,8 +80,12 @@
 }
 
 .footerCol .SocialLinks a:hover {
-  color: black;
-  background-color: #ff9635;
+  padding-left: 8px;
+}
+
+.copyright {
+  text-align: center;
+  font-size: 0.9rem;
 }
 
 @media (max-width: 750px) {

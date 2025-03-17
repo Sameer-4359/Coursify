@@ -110,6 +110,7 @@ function App() {
           <Route path="/update-course/:courseId" element={<UpdateCourse />} />
           <Route path="/certificate" element={<Certificate />} />
           <Route path="/aboutus" element={<AboutUs />} />
+          <Route path="/test" element={<ImageTextSlider />} />
         </Routes>
       </div>
     </Router>

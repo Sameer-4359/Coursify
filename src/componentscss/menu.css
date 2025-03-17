@@ -4,7 +4,8 @@
   width: 100%;
   z-index: 1000;
   transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out;
-  background-color: #007991;
+  background-color: white;
+  /* background-color: #007991; */
   padding: 10px 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -23,7 +24,8 @@ body {
 
 .navbarBrand {
     font-family: 'Montserrat', sans-serif;
-    color: #ffffff !important;
+    /* color: #ffffff !important; */
+    color: black;
     font-size: 30px !important;
     font-weight: bold;
     text-decoration: none;
@@ -49,29 +51,32 @@ body {
   
   /* Nav item link styling */
   .nav-link {
-    color: #ffffff !important;
+    color: 
+    black
+     !important;
     font-size: 16px;
     text-decoration: none;
     transition: color 0.3s;
   }
   
   .nav-link:hover {
-    color: aliceblue !important;
+    color: black !important;
     font-weight: 700 ;
   }
   
   /* Button styling for Login and Register */
   .authButton {
-    background-color: #ff9635 !important;
-    color: white;
+    background-color: white !important;
+    color: black !important;
     font-weight: bold;
     margin-left: 10px;
-    border: none;
+    border: black solid 1px !important;
     transition: background-color 0.3s;
   }
   
   .authButton:hover {
-    background-color: #ff7b2e !important; 
+    background-color: black !important; 
+    color: white !important;
     border: #ffffff solid 2px  !important;
   }
   

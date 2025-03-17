@@ -74,13 +74,10 @@ function CartPage() {
 
   return (
     <div>
-     <header><Menu /></header>
-
-    <div>
-      <Menu />
+       <header><Menu /></header>
       <div className="cartPage">
         <div className="cartCourses">
-          <h2>Your Cart</h2>
+          <h2>Shopping Cart</h2>
           {loading ? (
             <p>Loading...</p>
           ) : error ? (
@@ -95,28 +92,26 @@ function CartPage() {
                   <p>Instructor: {course.instructor_name}</p>
                   <p>Price: ${course.price}</p>
                 </div>
-                <button
+                <p
                   className="removeButton"
                   onClick={() => handleRemoveCourse(course.course_id)}
                 >
-                  Remove from Cart
-                </button>
+                  Remove
+                </p>
               </div>
             ))
           )}
         </div>
         <div className="cartSummary">
-          <h2>Summary</h2>
-          <p>Total Amount: ${calculateTotal()}</p>
+          <p>Total: </p>
+          <h2>Rs. {calculateTotal()}</h2>
           <button className="checkoutButton" onClick={handleCheckout}>
             Proceed to Checkout
           </button>
         </div>
       </div>
-      <Footer />
+      <footer><Footer /></footer>
     </div>
-    <footer><Footer /></footer>
-      </div>
 
   );
 }

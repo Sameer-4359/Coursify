@@ -1,4 +1,7 @@
 import React from "react";
+import Menu from "./Menu";
+import Footer from "./Footer";
+import "../componentscss/aboutus.css";
 
 const AboutUs = () => {
   const teamMembers = [
@@ -6,7 +9,7 @@ const AboutUs = () => {
       name: "Amna Mubashir",
       email: "amnahere40@gmail.com",
       role: "Database, SRS & Testing",
-      image: "amna.jpg", // Replace with actual image paths
+      image: "amna.jpg",
     },
     {
       name: "Shaheer Mustafa Awan",
@@ -23,56 +26,72 @@ const AboutUs = () => {
   ];
 
   return (
-    <div className="bg-gray-100 min-h-screen">
-      <header className="bg-blue-600 text-white py-6 text-center">
-        <h1 className="text-4xl font-bold">About Coursify</h1>
-        <p className="mt-2">Empowering learning through technology.</p>
-      </header>
-
-      <section className="max-w-4xl mx-auto mt-10 px-4">
-        <h2 className="text-3xl font-semibold text-center mb-6">Our Mission</h2>
-        <p className="text-gray-700 text-center">
-          At Coursify, our mission is to provide a structured and interactive learning environment with assignments, quizzes, and progress tracking, ensuring seamless online education.
-        </p>
-
-        <h2 className="text-3xl font-semibold text-center mt-10">Our Values</h2>
-        <ul className="text-gray-700 text-center mt-4">
-          <li>📚 Quality Education</li>
-          <li>💡 Innovation in Learning</li>
-          <li>🤝 Inclusivity & Accessibility</li>
-          <li>🔒 Secure & Reliable Platform</li>
-        </ul>
-
-        <h2 className="text-3xl font-semibold text-center mt-10">Our Goals</h2>
-        <ul className="text-gray-700 text-center mt-4">
-          <li>✅ Enable easy course creation & enrollment.</li>
-          <li>✅ Provide advanced student progress tracking.</li>
-          <li>✅ Implement gamification to enhance learning.</li>
-          <li>✅ Support multi-language and captioned video lectures.</li>
-        </ul>
-      </section>
-
-      <section className="max-w-5xl mx-auto mt-16 px-4">
-        <h2 className="text-3xl font-semibold text-center mb-6">Meet Our Team</h2>
-        <div className="grid md:grid-cols-3 gap-6 text-center">
-          {teamMembers.map((member) => (
-            <div key={member.email} className="bg-white shadow-md rounded-lg p-6">
-              <img
-                src={member.image}
-                alt={member.name}
-                className="w-32 h-32 mx-auto rounded-full object-cover"
-              />
-              <h3 className="text-xl font-semibold mt-4">{member.name}</h3>
-              <p className="text-gray-600">{member.role}</p>
-              <p className="text-blue-600">{member.email}</p>
+    <div className="aboutusPage">
+       <Menu />
+      <div className="page-container">
+        <div className="aboutBanner">
+          <div className="leftArea">
+            <header className="header-container">
+              <h1 className="title">Welcome to Where possibilities begins</h1>
+              <p className="subtitle">Empowering learning through technology.</p>
+            </header>
+          </div>
+          <div className="RigthArea">
+            <div style={{ backgroundImage: `url('https://about.udemy.com/wp-content/uploads/2024/02/about-homepage-hero-jan-2024.png')` }}>
             </div>
-          ))}
+          </div>
         </div>
-      </section>
+        <div className="headline"  ><p>Check out our latest company news!</p></div>
 
-      <footer className="bg-blue-600 text-white text-center py-6 mt-16">
-        <p>&copy; 2025 Coursify. All rights reserved.</p>
-      </footer>
+        <div>
+        <section className="section-container">
+          <div>
+            <h2 className="section-title">Our Mission</h2>
+            <p className="section-text">
+              At Coursify, our mission is to provide a structured and interactive learning environment with assignments, quizzes, and progress tracking, ensuring seamless online education.
+            </p>
+          </div>
+          <div>
+          <h2 className="section-title">Our Values</h2>
+          <ul className="section-list">
+            <li>📚 Quality Education</li>
+            <li>💡 Innovation in Learning</li>
+            <li>🤝 Inclusivity & Accessibility</li>
+            <li>🔒 Secure & Reliable Platform</li>
+          </ul>
+          </div>
+
+          <div>
+          <h2 className="section-title">Our Goals</h2>
+          <ul className="section-list">
+            <li>✅ Enable easy course creation & enrollment.</li>
+            <li>✅ Provide advanced student progress tracking.</li>
+            <li>✅ Implement gamification to enhance learning.</li>
+            <li>✅ Support multi-language and captioned video lectures.</li>
+          </ul>
+          </div>
+        </section>
+
+        <section className="team-container">
+          <h2 className="section-title">Meet Our Team</h2>
+          <div className="team-grid">
+            {teamMembers.map((member) => (
+              <div key={member.email} className="team-card">
+                <img
+                  src={member.image}
+                  alt={member.name}
+                  className="team-image"
+                />
+                <h3 className="team-name">{member.name}</h3>
+                <p className="team-role">{member.role}</p>
+                <p className="team-email">{member.email}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+        </div>
+      </div>
+      <Footer />
     </div>
   );
 };
