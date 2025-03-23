@@ -83,6 +83,7 @@ import StudentDashboard from "./components/StudentDashboard.jsx";
 import Cart from "./components/Cart.jsx";
 import UpdateCourse from "./components/UpdateCourse.jsx"
 import Certificate from './components/Certificate.jsx';
+import AboutUs from './components/AboutUs.jsx'
 
 
 function App() {
@@ -108,6 +109,7 @@ function App() {
           <Route path="/cart" element={<Cart />}/>
           <Route path="/update-course/:courseId" element={<UpdateCourse />} />
           <Route path="/certificate" element={<Certificate />} />
+          <Route path="/aboutus" element={<AboutUs />} />
         </Routes>
       </div>
     </Router>

@@ -91,6 +91,8 @@ function Footer() {
         </div>
       </div>
       <hr />
+      <div className="copyright"><p>&copy; 2025 Coursify. All rights reserved.</p></div>
+      
     </footer>
   );
 }
