@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom"; // Import useNavigate
-import "../componentscss/register.css";
-
+import Menu from "./Menu";
+import Footer from "./Footer";
 import "../componentscss/login.css"
 
 function Login() {
@@ -84,35 +84,75 @@ function Login() {
   };
 
   return (
-    <div className="loginContainer">
-      <h2>Log in to your Coursify Account</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={loginDetails.email}
-          onChange={handleChange}
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={loginDetails.password}
-          onChange={handleChange}
-        />
-        {error && <div className="error">{error}</div>} {/* Show error message if there's an issue */}
-        <p>
-          or <span>Forgot password</span>
-        </p>
-        <button type="submit">Login</button>
-        <p>
-          Don't have an account?{" "}
-          <span>
-            <Link to="/register">Sign up</Link>
-          </span>
-        </p>
-      </form>
+    <div>
+      <header><Menu /></header>
+      <div className="login-container">  
+        <div className="image-container">
+          <img
+            src="https://frontends.udemycdn.com/components/auth/desktop-illustration-step-2-x2.webp"
+            alt="Learning Illustration"
+            className="desktop-image"
+          />
+          <img
+            src="https://frontends.udemycdn.com/components/auth/mobile-illustration-x2.webp"
+            alt="Learning Mobile Illustration"
+            className="mobile-image"
+          />
+        </div>
+
+        <div className="form-container">
+          <h2>Log in to continue your learning journey</h2>
+          <form className="login-form" onSubmit={handleSubmit}>
+            <input className="input-field"
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={loginDetails.email}
+              onChange={handleChange}
+            />
+            <input className="input-field"
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={loginDetails.password}
+              onChange={handleChange}
+            />
+            {error && <div className="error">{error}</div>} {/* Show error message if there's an issue */}
+
+            <button className="login-button" type="submit">Login</button>
+
+            <div className="divider">
+            <hr /><span>Other log in options</span><hr />
+          </div>
+
+          {/* Social Login Buttons */}
+          <div className="social-buttons">
+            <button className="social-btn">
+              <img src="https://img.icons8.com/color/48/000000/google-logo.png" alt="Google" />
+            </button>
+            <button className="social-btn">
+              <img src="https://img.icons8.com/ios-filled/50/1877F2/facebook-new.png" alt="Facebook" />
+            </button>
+            <button className="social-btn">
+              <img src="https://img.icons8.com/ios-filled/50/000000/mac-os.png" alt="Apple" />
+            </button>
+          </div>
+          <p>
+              or <span>Forgot password</span>
+            </p>
+
+            <div className="register-link">
+              <p>
+                Don't have an account?{" "}
+                <span>
+                  <Link to="/register">Sign up</Link>
+                </span>
+              </p>
+            </div>
+          </form>
+        </div>     
+      </div>
+      <footer><Footer /></footer> 
     </div>
   );
 }

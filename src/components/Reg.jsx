@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-
+import Menu from "./Menu";
+import Footer from "./Footer";
 
 import "../componentscss/register.css"
 
@@ -50,57 +51,83 @@ function Register() {
   }
 
   return (
-    <div className="loginContainer">
-      <h2>Create a Coursify Account</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="username"
-          placeholder="Username"
-          value={registerDetails.username}
-          onChange={handleChange}
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={registerDetails.email}
-          onChange={handleChange}
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={registerDetails.password}
-          onChange={handleChange}
-        />
-        <input
-          type="password"
-          name="confirmPassword"
-          placeholder="Confirm Password"
-          value={registerDetails.confirmPassword}
-          onChange={handleChange}
-        />
+    <div>
+      <header><Menu /></header>
+      <div className="login-container">
+        <div className="image-container">
+          <img
+            src="https://frontends.udemycdn.com/components/auth/desktop-illustration-step-2-x2.webp"
+            alt="Learning Illustration"
+            className="desktop-image"
+          />
+          <img
+            src="https://frontends.udemycdn.com/components/auth/mobile-illustration-x2.webp"
+            alt="Learning Mobile Illustration"
+            className="mobile-image"
+          />
+        </div>
 
-        {/* Dropdown for Role */}
-        <select
-          name="role"
-          value={registerDetails.role}
-          onChange={handleChange}
-        >
-          <option value="Student">Student</option>
-          <option value="Instructor">Instructor</option>
-          <option value="Admin">Admin</option>
-        </select>
+        <div className="form-container">
+          <h2>Sign up and take the first step toward success!</h2>
+          <form className="login-form" onSubmit={handleSubmit}>
+            <input
+              className="input-field"
+              type="text"
+              name="username"
+              placeholder="Username"
+              value={registerDetails.username}
+              onChange={handleChange}
+            />
+            <input
+            className="input-field"
+              type="email"
+              name="email"
+              placeholder="Email"
+              value={registerDetails.email}
+              onChange={handleChange}
+            />
+            <input
+            className="input-field"
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={registerDetails.password}
+              onChange={handleChange}
+            />
+            <input
+            className="input-field"
+              type="password"
+              name="confirmPassword"
+              placeholder="Confirm Password"
+              value={registerDetails.confirmPassword}
+              onChange={handleChange}
+            />
 
-        <button type="submit">Register</button>
-        <p>
-          Already have an account?{" "}
-          <span>
-            <Link to="/login">Login</Link>
-          </span>
-        </p>
-      </form>
+            {/* Dropdown for Role */}
+            <select
+            className="input-field"
+              name="role"
+              value={registerDetails.role}
+              onChange={handleChange}
+            >
+              <option value="Student">Student</option>
+              <option value="Instructor">Instructor</option>
+              <option value="Admin">Admin</option>
+            </select>
+
+            <button className="login-button" type="submit">Register</button>
+            <div className="register-link">
+            <p>
+              Already have an account?{" "}
+              <span>
+                <Link to="/login">Login</Link>
+              </span>
+            </p>
+            </div>
+          </form>
+        </div>
+      </div>
+      <footer><Footer /></footer> 
     </div>
   );
 }
