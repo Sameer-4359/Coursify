@@ -90,7 +90,7 @@ function Register() {
         >
           <option value="Student">Student</option>
           <option value="Instructor">Instructor</option>
-          <option value="Admin">Admin</option>
+          {/* <option value="Admin">Admin</option> */}
         </select>
 
         <button type="submit">Register</button>
