@@ -1,17 +1,8 @@
-.experienceContainer {
-    max-width: 1200px; /* Adjust container width */
+.experienceContainer {/* Adjust container width */
     margin: 0 auto;
     padding: 20px;
     text-align: center;
-    background-color: #007991;
-  
-    /* Background image and styling */
-    /* background-image: linear-gradient(
-        rgba(255, 255, 255, 0.132),
-        rgba(255, 255, 255, 0.126)
-      ),
-      url("./images/background.jpg"); 
-    background-size: cover; /* Ensure image covers entire container */
+    background-color: #f6f7f9;
     background-position: center; /* Center the image */
     background-repeat: no-repeat; /* Prevent tiling */
     background-blend-mode: overlay; 
@@ -34,13 +25,13 @@
   
   .experienceCol h2 {
     font-size: 24px;
-    color: white;
+    color: #6D28D2;
     margin-bottom: 15px;
   }
   
   .experienceCol p {
     font-size: 16px;
-    color: rgb(232, 231, 231);
+    color: black;
     line-height: 1.6;
   }
   

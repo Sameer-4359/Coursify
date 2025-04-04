@@ -3,6 +3,7 @@ import Card from "./Card";
 
 
 import "../componentscss/slider.css"
+import { faBold } from "@fortawesome/free-solid-svg-icons";
 
 /*function Slider() {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -106,6 +107,11 @@ function Slider({ role }) {
 
   return (
     <div className="sliderContainer">
+      <div className="headings"> 
+        <h5>Courses and Professional Certificates</h5>
+        <h1>New on Coursify</h1>
+        <p>Explore our newest programs, focused on delivering in-demand skills.</p>
+            </div>
       <button className="prevButton" onClick={prevSlide}>&#10094;</button>
       <div className="sliderTrack" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
         {items.map((item) => (
