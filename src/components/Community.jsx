@@ -2,34 +2,22 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../componentscss/community.css";
 
-
 function Community() {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
-  const navigate = useNavigate(); 
-
-  function saveState(event) {
-    setEmail(event.target.value);
-  }
+  const navigate = useNavigate();
 
   async function handleSubscribe() {
     try {
       const response = await fetch("http://localhost:5000/api/community/subscribe", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       });
 
       const data = await response.json();
-      if (response.ok) {
-        setMessage(data.message);
-      } else {
-        setMessage(data.message || "Failed to subscribe.");
-      }
+      setMessage(response.ok ? data.message : "Failed to subscribe.");
     } catch (error) {
-      console.error("Error during subscription:", error);
       setMessage("An error occurred. Please try again.");
     }
   }
@@ -38,22 +26,18 @@ function Community() {
     <div className="communityMain">
       <div className="communityContainer">
         <h2>Join our Community</h2>
-        <p>
-          Enter your email address to register to our newsletter subscription
-          delivered on a regular basis!
-        </p>
+        <p>Enter your email to subscribe to our newsletter!</p>
         <input
-          onChange={saveState}
-          type="text"
-          value={email}
+          type="email"
           placeholder="Enter your email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
         <button onClick={handleSubscribe}>Subscribe</button>
         <button className="about-us-btn" onClick={() => navigate("/aboutus")}>
-                    About Us
-                </button>
-        <p>{message}</p>
-        <hr />
+          About Us
+        </button>
+        {message && <p>{message}</p>}
       </div>
     </div>
   );

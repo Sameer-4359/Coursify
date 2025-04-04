@@ -35,6 +35,10 @@
     transform: translateY(-8px);
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Slightly increased shadow on hover */
   }
+  .headings {
+    margin-top: 20px;
+  }
+
   
   /* Image styling for cards */
   .cardImg img {
