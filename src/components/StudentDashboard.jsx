@@ -50,7 +50,7 @@ function StudentDashboard() {
     
     <div className="studentDashboard">
       {/* Menu */}
-      //<Menu />
+      <Menu />
 
       {/* Welcome Section */}
       <div className="dashboardWelcome">
