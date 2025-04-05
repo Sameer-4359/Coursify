@@ -75,7 +75,7 @@ function InstructorDashboard() {
   return (
 
     <div className="instructorDashboard">
-      //<Menu />
+      <Menu />
 
       {/* Summary Section */}
       <div className="dashboardSummary">
