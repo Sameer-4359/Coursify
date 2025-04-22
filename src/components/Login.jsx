@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom"; // Import useNavigate
+import { useAuth } from "./AuthContext";
 import Menu from "./Menu";
 import Footer from "./Footer";
 import "../componentscss/login.css"
 
+
 function Login() {
   const [loginDetails, setLoginDetails] = useState({ email: "", password: "" });
   const [error, setError] = useState(""); // State to manage error messages
+  const { login } = useAuth();
   const navigate = useNavigate(); // Initialize navigate
 
   function handleChange(event) {
@@ -46,10 +49,12 @@ function Login() {
       .then((data) => {
         if (data.token) {
           // If login is successful, store the JWT token and role
-          localStorage.setItem("token", data.token);
-          localStorage.setItem("userId", data.user.id); // Store the user ID
-          localStorage.setItem("role", data.user.role); // Store the role (instructor or student)
-          localStorage.setItem("username", data.user.username);
+          login({
+            token: data.token,
+            role: data.user.role,
+            username: data.user.username,
+            id: data.user.id
+          });          
           alert("Logged in as: " + data.user.role);
 
           if (data.user.role === "Student") {

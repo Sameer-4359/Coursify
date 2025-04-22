@@ -1,5 +1,6 @@
 import React from "react";
 import "../componentscss/footer.css";
+import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faFacebook,
@@ -17,7 +18,7 @@ function Footer() {
             <h4>Company</h4>
             <ul>
               <li>
-                <a href="">About us</a>
+              <Link to="/aboutus">About us</Link>
               </li>
               <li>
                 <a href="">Our service</a>
