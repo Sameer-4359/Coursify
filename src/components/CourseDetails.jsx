@@ -260,7 +260,7 @@ const CourseDetails = () => {
     course.modules.map((module) => (
       <div key={module.id} className="module">
         <h3 className="module-title">
-          {role === "Student" && (
+          {role === "Student" && isEnrolled && (
             <input
               type="checkbox"
               checked={isModuleCompleted(module)}
@@ -273,7 +273,7 @@ const CourseDetails = () => {
           {module.lessons.map((lesson, index) => (
             <li key={index} className="course-lesson">
               <label>
-                {role === "Student" && (
+                {role === "Student" && isEnrolled && (
                   <input
                     type="checkbox"
                     checked={completedLessons[module.id]?.includes(index)}

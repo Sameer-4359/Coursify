@@ -70,6 +70,7 @@
 
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { AuthProvider } from "./components/AuthContext";
 import sampleCourse from "./sampleCourse.js";
 import Home from "./components/Home";
 import Login from "./components/Login";
@@ -85,9 +86,9 @@ import UpdateCourse from "./components/UpdateCourse.jsx"
 import Certificate from './components/Certificate.jsx';
 import AboutUs from './components/AboutUs.jsx'
 
-
 function App() {
   return (
+    <AuthProvider>
     <Router>
       <div className="App">
         {/* Render these components only on non-auth routes */}
@@ -113,6 +114,7 @@ function App() {
         </Routes>
       </div>
     </Router>
+    </AuthProvider>
   );
 }
 

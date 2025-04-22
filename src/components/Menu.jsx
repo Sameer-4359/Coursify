@@ -64,13 +64,13 @@ import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import CourseSearchBar from "./CourseSearchBar";
 import { useLocation } from "react-router-dom";
 import "../componentscss/menu.css";
+import { useAuth } from "./AuthContext";
 
 function Menu() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { isLoggedIn, user, logout } = useAuth();
   const [showMenu, setShowMenu] = useState(true); // State to manage menu visibility
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login state
-  const [userRole, setUserRole] = useState(null); // Track user role
   const role = localStorage.getItem("role"); // Fetch role from localStorage
 
   let lastScrollY = 0; // Tracks the last scroll position
@@ -93,19 +93,13 @@ function Menu() {
     };
   }, []);
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    const savedRole = localStorage.getItem("role"); // Get role from localStorage
-    setIsLoggedIn(!!token); // If token exists, set to true
-    setUserRole(savedRole); // Set role based on localStorage value
-  }, []);
+
 
   const handleLogout = () => {
-    localStorage.clear(); // Clear token and user data
-    setIsLoggedIn(false);
-    setUserRole(null); // Clear user role on logout
-    navigate("/login");
+    logout();
+    navigate("/");
   };
+  
 
   // Handler for View Cart button
   const handleViewCart = () => {
@@ -154,10 +148,11 @@ function Menu() {
               </>
             ) : (
               <>
+                <span className="nav-link">Hi, {user?.username}</span>
                 <Button onClick={handleLogout} className="authButton">
                   Logout
                 </Button>
-                {userRole === "Student" && location.pathname.toLowerCase() === "/studentdashboard" && (
+                {role === "Student" && location.pathname.toLowerCase() === "/studentdashboard" && (
                   <Button onClick={handleViewCart} className="authButton">
                     <FontAwesomeIcon icon={faShoppingCart} /> View Cart
                   </Button>
