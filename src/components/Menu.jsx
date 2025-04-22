@@ -1,61 +1,3 @@
-// import React from "react";
-// import CourseSearchBar from "./CourseSearchBar";
-// import { useNavigate } from "react-router-dom"; // Import useNavigate
-// import { Navbar, Nav, Container, Button } from "react-bootstrap";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
-
-// function Menu() {
-//   const navigate = useNavigate(); // Initialize navigate
-
-//   // Handler for View Cart button
-//   const handleViewCart = () => {
-//     console.log("View Cart button clicked"); // Debug log
-//     navigate("/cart");
-//   };
-
-//   return (
-//     <Navbar expand="md" className="navbarCustom">
-//       <Container>
-//         <Navbar.Brand href="#" className="navbarBrand">
-//           Navbar
-//         </Navbar.Brand>
-//         <Navbar.Toggle
-//           aria-controls="basic-navbar-nav"
-//           className="navbar-toggler"
-//         />
-//         <Navbar.Collapse id="basic-navbar-nav">
-//           <Nav className="ms-auto">
-//             <Nav.Link href="#home" className="nav-link">
-//               Home
-//             </Nav.Link>
-//             <Nav.Link href="#courses" className="nav-link">
-//               Courses
-//             </Nav.Link>
-//             <Nav.Link href="#about-us" className="nav-link">
-//               About Us
-//             </Nav.Link>
-//             <Nav.Link href="#contact-us" className="nav-link">
-//               Contact Us
-//             </Nav.Link>
-//             <Button href="#login" className="authButton">
-//               Login
-//             </Button>
-//             <Button href="#register" className="authButton">
-//               Register
-//             </Button>
-//             <Button onClick={handleViewCart} className="authButton">
-//               <FontAwesomeIcon icon={faShoppingCart} /> View Cart
-//             </Button>
-//             <CourseSearchBar />
-//           </Nav>
-//         </Navbar.Collapse>
-//       </Container>
-//     </Navbar>
-//   );
-// }
-
-// export default Menu;
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Navbar, Nav, Container, Button } from "react-bootstrap";
@@ -170,5 +112,4 @@ function Menu() {
     </Navbar>
   );
 }
-
 export default Menu;

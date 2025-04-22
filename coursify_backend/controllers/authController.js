@@ -156,8 +156,15 @@ async function registerUser(req, res) {
     }
 
     // Validate strong password
-    if (!validator.isStrongPassword(password, { minLength: 8, minNumbers: 1, minUppercase: 1 })) {
-      return res.status(400).json({ message: "Password must be at least 8 characters, with 1 uppercase letter and 1 number." });
+    if (!validator.isStrongPassword(password, { 
+      minLength: 8,
+      minLowercase: 0, // ← now optional
+      minUppercase: 1,
+      minNumbers: 1,
+      minSymbols: 1,    // ← now optional
+      returnScore: false
+     })) {
+      return res.status(400).json({ message: "Password must be at least 8 characters, with 1 uppercase letter, 1 number and 1 symbol." });
     }
 
     // Confirm password check (Already handled in frontend, but optional here)
