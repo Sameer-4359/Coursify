@@ -7,6 +7,7 @@ import Community from "./Community.jsx";
 import Experience from "./Experience.jsx";
 import ChooseUs from "./ChooseUs.jsx";
 import "../componentscss/home.css";
+import Heading from "./Heading.jsx";
 
 
 function Home(){
@@ -14,7 +15,8 @@ function Home(){
         <div>
             <header><Menu /></header>
             <main>
-            <Banner image={'https://aroomat.com/wp-content/uploads/2025/04/banner.png'}/>
+            <Banner />
+            <Heading />
             <Slider />
             <Experience />
             <ChooseUs />

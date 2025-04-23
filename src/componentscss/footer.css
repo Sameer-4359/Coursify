@@ -4,6 +4,7 @@
   color: white !important;
   padding: 50px 30px !important;
   padding-bottom: 10px !important;
+  
 }
 
 .footerCol ul {
@@ -44,7 +45,6 @@
   position: absolute;
   left: 0;
   bottom: -10px;
-  background-color: #ff9635;
   height: 2px;
   box-sizing: border-box;
   width: 50px;
