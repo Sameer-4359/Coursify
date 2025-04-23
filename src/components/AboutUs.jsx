@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Menu from "./Menu";
 import Footer from "./Footer";
 import "../componentscss/aboutus.css";
@@ -15,7 +15,7 @@ const AboutUs = () => {
       name: "Shaheer Mustafa Awan",
       email: "shaheerhere40@gmail.com",
       role: "Frontend Development, UI/UX",
-      image: "shaheer.jpg",
+      image: "/images/shaheer.png",
     },
     {
       name: "Sameer Sohail",
@@ -24,6 +24,43 @@ const AboutUs = () => {
       image: "sameer.jpg",
     },
   ];
+  const coreValues = [
+    {
+      title: "Excellence in Education",
+      description: "Delivering high-quality, impactful learning experiences.",
+      image: "/images/quality.png",
+    },
+    {
+      title: "Innovation",
+      description: "Continuously evolving to meet modern educational needs.",
+      image: "/images/innovation2.jpg",
+    },
+    {
+      title: "Inclusivity",
+      description: "Ensuring access and opportunity for all learners.",
+      image: "/images/innovation.jpg",
+    },
+    {
+      title: "Trust & Security",
+      description: "Providing a reliable and secure digital environment.",
+      image: "/images/security.jpg",
+    },
+  ];
+
+  const [current, setCurrent] = useState(0);
+
+  // Auto-slide every 4 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrent((prev) => (prev + 1) % coreValues.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const goToSlide = (index) => {
+    setCurrent(index);
+  };
+  
 
   return (
     <div className="aboutusPage">
@@ -41,59 +78,76 @@ const AboutUs = () => {
             </div>
           </div>
         </div>
-        <div className="headline"  ><p>Check out our latest company news!</p></div>
+      <div className="headline"  ><p>Check out our latest company news!</p></div>
 
-        <div>
-          <section className="section-container">
-            <div>
-              <h2 className="section-title">Our Mission</h2>
-              <p className="section-text">
-                Coursify is committed to transforming education through structured, interactive, and accessible digital learning. Our mission is to empower learners and educators by providing a seamless platform for course delivery, assessments, and performance tracking.
-              </p>
-            </div>
-
-            <div>
-              <h2 className="section-title">Our Core Values</h2>
-              <ul className="section-list">
-                <li><strong>Excellence in Education</strong> — Delivering high-quality, impactful learning experiences.</li>
-                <li><strong>Innovation</strong> — Continuously evolving to meet modern educational needs.</li>
-                <li><strong>Inclusivity</strong> — Ensuring access and opportunity for all learners.</li>
-                <li><strong>Trust & Security</strong> — Providing a reliable and secure digital environment.</li>
-              </ul>
-            </div>
-
-            <div>
-              <h2 className="section-title">Our Strategic Goals</h2>
-              <ul className="section-list">
-                <li>Facilitate intuitive course creation and seamless enrollment processes.</li>
-                <li>Enable detailed analytics for tracking learner progress and performance.</li>
-                <li>Incorporate gamified learning experiences to boost engagement and retention.</li>
-                <li>Support diverse learning needs through multilingual content and accessible video formats.</li>
-              </ul>
-            </div>
-
-
-          </section>
-
-          <section className="team-container">
-            <h2 className="section-title">Meet Our Team</h2>
-            <div className="team-grid">
-              {teamMembers.map((member) => (
-                <div key={member.email} className="team-card">
-                  <img
-                    src={member.image}
-                    alt={member.name}
-                    className="team-image"
-                  />
-                  <h3 className="team-name">{member.name}</h3>
-                  <p className="team-role">{member.role}</p>
-                  <p className="team-email">{member.email}</p>
-                </div>
-              ))}
-            </div>
-          </section>
+      <div className="mission-section">
+      <h2 className="headings">Our Mission</h2>
+        <div className="mission-images">
+          <img src="/images/mission4.png" alt="Coursify Team 1" className="mission-img top-img" />
+          <img src="/images/mission2.jpg" alt="Coursify Team 2" className="mission-img middle-img" />
+          <img src="/images/mission3.jpg" alt="Coursify Team 3" className="mission-img bottom-img" />
+        </div>
+        <div className="mission-content">
+          <h2>Empowering Learning, Everywhere</h2>
+          <p>
+            At Coursify, our mission is to make quality education accessible to all. 
+            We believe in breaking barriers through technology—helping learners and educators 
+            connect from anywhere in the world. Every feature we build centers around enabling 
+            growth, inclusivity, and lifelong learning.
+          </p>
         </div>
       </div>
+
+      <section className="core-values-section">
+      <h2 className="headings">Our Core Values</h2>
+      <div className="slider-container">
+        <div
+          className="slider-track"
+          style={{ transform: `translateX(-${current * 100}%)` }}
+        >
+          {coreValues.map((value, index) => (
+            <div className="slide" key={index}>
+            <div className="slide-content">
+              <img src={value.image} alt={value.title} className="slide-image" />
+              <div className="slide-text">
+                <h3>{value.title}</h3>
+                <p>{value.description}</p>
+              </div>
+            </div>
+          </div>
+          
+          ))}
+        </div>
+        <div className="dots">
+          {coreValues.map((_, index) => (
+            <span
+              key={index}
+              className={`dot ${index === current ? "active" : ""}`}
+              onClick={() => goToSlide(index)}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+
+        <section className="team-container">
+          <h2 className="headings">Meet Our Team</h2>
+          <div className="team-grid">
+            {teamMembers.map((member) => (
+              <div key={member.email} className="team-card">
+                <img
+                  src={member.image}
+                  alt={member.name}
+                  className="team-image"
+                />
+                <h3 className="team-name">{member.name}</h3>
+                <p className="team-role">{member.role}</p>
+                <p className="team-email">{member.email}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+        </div>
       <Footer />
     </div>
   );
