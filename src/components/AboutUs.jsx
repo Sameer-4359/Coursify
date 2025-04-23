@@ -27,7 +27,7 @@ const AboutUs = () => {
 
   return (
     <div className="aboutusPage">
-       <Menu />
+      <Menu />
       <div className="page-container">
         <div className="aboutBanner">
           <div className="leftArea">
@@ -44,51 +44,54 @@ const AboutUs = () => {
         <div className="headline"  ><p>Check out our latest company news!</p></div>
 
         <div>
-        <section className="section-container">
-          <div>
-            <h2 className="section-title">Our Mission</h2>
-            <p className="section-text">
-              At Coursify, our mission is to provide a structured and interactive learning environment with assignments, quizzes, and progress tracking, ensuring seamless online education.
-            </p>
-          </div>
-          <div>
-          <h2 className="section-title">Our Values</h2>
-          <ul className="section-list">
-            <li>📚 Quality Education</li>
-            <li>💡 Innovation in Learning</li>
-            <li>🤝 Inclusivity & Accessibility</li>
-            <li>🔒 Secure & Reliable Platform</li>
-          </ul>
-          </div>
+          <section className="section-container">
+            <div>
+              <h2 className="section-title">Our Mission</h2>
+              <p className="section-text">
+                Coursify is committed to transforming education through structured, interactive, and accessible digital learning. Our mission is to empower learners and educators by providing a seamless platform for course delivery, assessments, and performance tracking.
+              </p>
+            </div>
 
-          <div>
-          <h2 className="section-title">Our Goals</h2>
-          <ul className="section-list">
-            <li>✅ Enable easy course creation & enrollment.</li>
-            <li>✅ Provide advanced student progress tracking.</li>
-            <li>✅ Implement gamification to enhance learning.</li>
-            <li>✅ Support multi-language and captioned video lectures.</li>
-          </ul>
-          </div>
-        </section>
+            <div>
+              <h2 className="section-title">Our Core Values</h2>
+              <ul className="section-list">
+                <li><strong>Excellence in Education</strong> — Delivering high-quality, impactful learning experiences.</li>
+                <li><strong>Innovation</strong> — Continuously evolving to meet modern educational needs.</li>
+                <li><strong>Inclusivity</strong> — Ensuring access and opportunity for all learners.</li>
+                <li><strong>Trust & Security</strong> — Providing a reliable and secure digital environment.</li>
+              </ul>
+            </div>
 
-        <section className="team-container">
-          <h2 className="section-title">Meet Our Team</h2>
-          <div className="team-grid">
-            {teamMembers.map((member) => (
-              <div key={member.email} className="team-card">
-                <img
-                  src={member.image}
-                  alt={member.name}
-                  className="team-image"
-                />
-                <h3 className="team-name">{member.name}</h3>
-                <p className="team-role">{member.role}</p>
-                <p className="team-email">{member.email}</p>
-              </div>
-            ))}
-          </div>
-        </section>
+            <div>
+              <h2 className="section-title">Our Strategic Goals</h2>
+              <ul className="section-list">
+                <li>Facilitate intuitive course creation and seamless enrollment processes.</li>
+                <li>Enable detailed analytics for tracking learner progress and performance.</li>
+                <li>Incorporate gamified learning experiences to boost engagement and retention.</li>
+                <li>Support diverse learning needs through multilingual content and accessible video formats.</li>
+              </ul>
+            </div>
+
+
+          </section>
+
+          <section className="team-container">
+            <h2 className="section-title">Meet Our Team</h2>
+            <div className="team-grid">
+              {teamMembers.map((member) => (
+                <div key={member.email} className="team-card">
+                  <img
+                    src={member.image}
+                    alt={member.name}
+                    className="team-image"
+                  />
+                  <h3 className="team-name">{member.name}</h3>
+                  <p className="team-role">{member.role}</p>
+                  <p className="team-email">{member.email}</p>
+                </div>
+              ))}
+            </div>
+          </section>
         </div>
       </div>
       <Footer />
