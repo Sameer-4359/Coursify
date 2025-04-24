@@ -78,60 +78,60 @@ const AboutUs = () => {
             </div>
           </div>
         </div>
-      <div className="headline"  ><p>Check out our latest company news!</p></div>
+        <div className="headline"  ><p>Check out our latest company news!</p></div>
 
-      <div className="mission-section">
-      <h2 className="headings">Our Mission</h2>
-        <div className="mission-images">
-          <img src="/images/mission4.png" alt="Coursify Team 1" className="mission-img top-img" />
-          <img src="/images/mission2.jpg" alt="Coursify Team 2" className="mission-img middle-img" />
-          <img src="/images/mission3.jpg" alt="Coursify Team 3" className="mission-img bottom-img" />
+        <div className="mission-section">
+        <h2 className="heading">Our Mission</h2>
+          <div className="mission-images">
+            <img src="/images/mission4.png" alt="Coursify Team 1" className="mission-img top-img" />
+            <img src="/images/mission2.jpg" alt="Coursify Team 2" className="mission-img middle-img" />
+            <img src="/images/mission3.jpg" alt="Coursify Team 3" className="mission-img bottom-img" />
+          </div>
+          <div className="mission-content">
+            <h2>Empowering Learning, Everywhere</h2>
+            <p>
+              At Coursify, our mission is to make quality education accessible to all. 
+              We believe in breaking barriers through technology—helping learners and educators 
+              connect from anywhere in the world. Every feature we build centers around enabling 
+              growth, inclusivity, and lifelong learning.
+            </p>
+          </div>
         </div>
-        <div className="mission-content">
-          <h2>Empowering Learning, Everywhere</h2>
-          <p>
-            At Coursify, our mission is to make quality education accessible to all. 
-            We believe in breaking barriers through technology—helping learners and educators 
-            connect from anywhere in the world. Every feature we build centers around enabling 
-            growth, inclusivity, and lifelong learning.
-          </p>
-        </div>
-      </div>
 
-      <section className="core-values-section">
-      <h2 className="headings">Our Core Values</h2>
-      <div className="slider-container">
-        <div
-          className="slider-track"
-          style={{ transform: `translateX(-${current * 100}%)` }}
-        >
-          {coreValues.map((value, index) => (
-            <div className="slide" key={index}>
-            <div className="slide-content">
-              <img src={value.image} alt={value.title} className="slide-image" />
-              <div className="slide-text">
-                <h3>{value.title}</h3>
-                <p>{value.description}</p>
+        <section className="core-values-section">
+          <h2 className="heading">Our Core Values</h2>
+          <div className="slider-container">
+            <div
+              className="slider-track"
+              style={{ transform: `translateX(-${current * 100}%)` }}
+            >
+              {coreValues.map((value, index) => (
+                <div className="slide" key={index}>
+                <div className="slide-content">
+                  <img src={value.image} alt={value.title} className="slide-image" />
+                  <div className="slide-text">
+                    <h3>{value.title}</h3>
+                    <p>{value.description}</p>
+                  </div>
+                </div>
               </div>
+              
+              ))}
+            </div>
+            <div className="dots">
+              {coreValues.map((_, index) => (
+                <span
+                  key={index}
+                  className={`dot ${index === current ? "active" : ""}`}
+                  onClick={() => goToSlide(index)}
+                />
+              ))}
             </div>
           </div>
-          
-          ))}
-        </div>
-        <div className="dots">
-          {coreValues.map((_, index) => (
-            <span
-              key={index}
-              className={`dot ${index === current ? "active" : ""}`}
-              onClick={() => goToSlide(index)}
-            />
-          ))}
-        </div>
-      </div>
-    </section>
+        </section>
 
         <section className="team-container">
-          <h2 className="headings">Meet Our Team</h2>
+          <h2 className="heading">Meet Our Team</h2>
           <div className="team-grid">
             {teamMembers.map((member) => (
               <div key={member.email} className="team-card">
