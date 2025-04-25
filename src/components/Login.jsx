@@ -20,6 +20,11 @@ function Login() {
     }));
   }
 
+  const handleGoogleLogin = () => {
+    window.location.href = "http://localhost:5000/api/google-direct/google";
+ // This triggers the Google OAuth flow
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault(); // Prevent default form submission behavior
 
@@ -132,15 +137,9 @@ function Login() {
 
           {/* Social Login Buttons */}
           <div className="social-buttons">
-            <button className="social-btn">
-              <img src="https://img.icons8.com/color/48/000000/google-logo.png" alt="Google" />
-            </button>
-            <button className="social-btn">
-              <img src="https://img.icons8.com/ios-filled/50/1877F2/facebook-new.png" alt="Facebook" />
-            </button>
-            <button className="social-btn">
-              <img src="https://img.icons8.com/ios-filled/50/000000/mac-os.png" alt="Apple" />
-            </button>
+          <button className="social-btn" onClick={handleGoogleLogin}>
+            <img src="https://img.icons8.com/color/48/000000/google-logo.png" alt="Google" />
+          </button>
           </div>
           <p>
               or <span>Forgot password</span>

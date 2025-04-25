@@ -85,6 +85,7 @@ import Cart from "./components/Cart.jsx";
 import UpdateCourse from "./components/UpdateCourse.jsx"
 import Certificate from './components/Certificate.jsx';
 import AboutUs from './components/AboutUs.jsx'
+import OAuthSuccess from './components/OAuthSucess.jsx'
 
 function App() {
   return (
@@ -111,6 +112,7 @@ function App() {
           <Route path="/update-course/:courseId" element={<UpdateCourse />} />
           <Route path="/certificate" element={<Certificate />} />
           <Route path="/aboutus" element={<AboutUs />} />
+          <Route path="/oauth-success" element={<OAuthSuccess />} />
         </Routes>
       </div>
     </Router>

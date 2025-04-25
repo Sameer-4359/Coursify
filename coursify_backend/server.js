@@ -12,7 +12,7 @@ const enrollRoutes = require("./routes/enrollRoutes");
 const adminRoutes = require("./routes/adminRoute");
 const path = require("path");
 const uploadRoutes = require("./routes/uploadRoutes");
-
+const googleOAuthRoutes = require("./routes/googleOAuthDirect");
 
 
 require("dotenv").config();
@@ -47,6 +47,7 @@ app.use("/api/checkout", enrollRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api", require("./routes/lessonRoutes"));
+app.use("/api/google-direct", googleOAuthRoutes);
 
 
 // API to save certificate image
