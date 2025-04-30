@@ -1,7 +1,8 @@
 .banner-container {
   width: 100%;
   height: 80vh;
-  background-image: url('https://images.unsplash.com/photo-1506765515384-028b60a970df');
+  /* background-image: url('https://images.unsplash.com/photo-1506765515384-028b60a970df'); */
+  background-image: url('/public/images/banner.png');
   /*replace with your image path */
   background-size: cover;
   background-position: center;

@@ -1,272 +1,129 @@
-/* .course-creation-container {
-    max-width: 100%;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #007991;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  .course-creation-container h2 {
-    text-align: center;
-    color: #333;
-    margin-bottom: 20px;
-  }
-  
-  .course-creation-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .course-input,
-  .course-textarea,
-  .module-input,
-  .lesson-input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 14px;
-    
-  }
-  
-  .course-textarea {
-    resize: none;
-    height: 100px;
-    width: 250px;
-    align-self: center;
-  }
-  
-  .modules-section {
-    margin-top: 20px;
-    width: 50%;
-    align-self: center;
-  }
-  
-  .modules-section h3 {
-    margin-bottom: 10px;
-    color: #555;
-    text-align: center;
-  }
-  
-  .module-block {
-    margin-bottom: 20px;
-    padding: 20px;
-    background-color: #fff;
-    border: 1px solid #e0e0e0;
-    border-radius: 4px;
-    justify-items: center;
-  }
-  
-  .module-block h4 {
-    margin-top: 20px;
-    margin-bottom: 10px;
-    color: #777;
-  }
-  
-  button {
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    font-size: 14px;
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  button:hover {
-    background-color: #ff7f00;
-  }
-  
-  .add-module-button,
-  .add-lesson-button,
-  .submit-course-button {
-    background-color: #ff9635;
-  }
-  
-  .add-module-button {
-    margin-top: 10px;
-  }
-  
-  .submit-course-button {
-    width: 100%;
-    font-weight: bold;
-    align-self: center;
-  }
-   */
-
-   
-   /* General Styling */
-   body {
-    margin: 0;
-    padding: 0;
-    font-family: "Roboto", sans-serif;
-    background-color: #f9f9f9;
-    color: #333;
-  }
-  
-  
-  /* Container for Course Creation Form */
   .course-creation-container {
-    max-width: 800px;
-    margin: 50px auto;
-    padding: 20px;
-    background: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border: 1px solid #ddd;
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #f9fafb;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    font-family: 'Segoe UI', sans-serif;
   }
-  
   
   .course-creation-container h2 {
-    font-size: 2rem;
     text-align: center;
-    color: #007991;
-    margin-bottom: 20px;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+    color: #1f2937;
   }
   
-  
-  /* Form Styling */
   .course-creation-form {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 1.5rem;
   }
   
-  
-  /* Input Fields */
   .course-input,
   .course-textarea,
   .module-input,
   .lesson-input {
-    color: #333;
     width: 100%;
-    padding: 12px 15px;
+    padding: 0.75rem 1rem;
     font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    outline: none;
-    transition: border-color 0.3s ease;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background-color: #fff;
+    transition: border 0.3s ease;
   }
-  
   
   .course-input:focus,
   .course-textarea:focus,
   .module-input:focus,
   .lesson-input:focus {
-    border-color: #007991;
+    border-color: #6366f1;
+    outline: none;
   }
   
-  
-  /* Textarea for Description */
   .course-textarea {
-    min-height: 100px;
     resize: vertical;
+    min-height: 100px;
   }
   
-  
-  /* Modules Section */
   .modules-section {
-    background-color: #f7f7f7;
-    padding: 20px;
+    background-color: #eef2ff;
+    padding: 1.5rem;
     border-radius: 10px;
-    border: 1px solid #ddd;
   }
-  
   
   .modules-section h3 {
-    font-size: 1.5rem;
-    margin-bottom: 15px;
-    color: #007991;
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    color: #374151;
   }
-  
   
   .module-block {
-    margin-bottom: 20px;
-    padding: 15px;
-    background: #ffffff;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
   }
-  
   
   .module-block h4 {
-    margin-top: 15px;
-    margin-bottom: 10px;
-    font-size: 1.2rem;
-    color: #333;
+    margin-top: 1rem;
+    font-size: 1.1rem;
+    color: #4b5563;
   }
   
+  .lesson-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
   
-  /* Buttons */
+  .video-upload {
+    padding: 0.5rem;
+    background-color: #f3f4f6;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 0.95rem;
+  }
+  
   .add-lesson-button,
   .add-module-button,
   .submit-course-button {
-    padding: 10px 15px;
+    padding: 0.75rem 1.5rem;
     font-size: 1rem;
+    font-weight: 600;
+    background-color: #4f46e5;
+    color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 1rem;
+    transition: background-color 0.3s ease;
   }
   
-  
-  .add-lesson-button {
-    background-color: #28a745;
-    color: #ffffff;
-    margin-top: 10px;
+  .add-lesson-button:hover,
+  .add-module-button:hover,
+  .submit-course-button:hover {
+    background-color: #4338ca;
   }
-  
-  
-  .add-module-button {
-    background-color: #ff9635;
-    color: #ffffff;
-  }
-  
   
   .submit-course-button {
-    background-color: #007991;
-    color: #ffffff;
-    margin-top: 20px;
+    background-color: #10b981;
   }
-  
-  
-  .add-lesson-button:hover {
-    background-color: #218838;
-    transform: translateY(-2px);
-  }
-  
-  
-  .add-module-button:hover {
-    background-color: #ff7b2e;
-    transform: translateY(-2px);
-  }
-  
   
   .submit-course-button:hover {
-    background-color: #006478;
-    transform: translateY(-2px);
+    background-color: #059669;
   }
   
+  @media (max-width: 600px) {
+    .lesson-block,
+    .module-block {
+      flex-direction: column;
+    }
   
-  /* Responsive Design */
-  @media (max-width: 768px) {
     .course-creation-container {
-      padding: 15px;
+      padding: 1rem;
     }
-  
-  
-    .course-creation-container h2 {
-      font-size: 1.8rem;
-    }
-  
-  
-    .modules-section h3 {
-      font-size: 1.3rem;
-    }
-  }
-  
-  
-  
-  
+  } 

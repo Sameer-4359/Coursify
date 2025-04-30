@@ -369,8 +369,6 @@ const CourseCreation = () => {
   };
   
   return (
-    <div>
-      <header><Menu /></header>
       <div className="course-creation-container">
         <h2>Create a New Course</h2>
         <form onSubmit={handleSubmit} className="course-creation-form">
@@ -439,8 +437,6 @@ const CourseCreation = () => {
           <button type="submit" className="submit-course-button">Submit Course</button>
         </form>
       </div>
-      <footer><Footer /></footer>
-    </div>
   );
 };
 
