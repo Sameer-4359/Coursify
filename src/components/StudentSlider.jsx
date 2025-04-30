@@ -1,77 +1,78 @@
-import React, { useState, useEffect } from "react";
-import StudentCard from "./StudentCard";
+import React, { useEffect, useState } from "react";
+import Slider from "react-slick";
 import axios from "axios";
 
-
-import "../componentscss/slider.css";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import "../componentscss/studentslider.css";
 
 function StudentSlider() {
-  const [currentIndex, setCurrentIndex] = useState(0); // Start with the first course
-  const [enrolledCourses, setEnrolledCourses] = useState([]); // Store enrolled courses
+  const [enrolledCourses, setEnrolledCourses] = useState([]);
 
   useEffect(() => {
-    // Fetch enrolled courses for the logged-in student
     const fetchEnrolledCourses = async () => {
       try {
         const token = localStorage.getItem("token");
         if (!token) {
-          console.error("No authentication token found!");
+          console.error("No token found");
           return;
         }
 
         const response = await axios.get("http://localhost:5000/api/checkout/enrolled-courses", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         });
 
         setEnrolledCourses(response.data);
       } catch (error) {
-        console.error("Error fetching enrolled courses:", error);
+        console.error("Failed to fetch enrolled courses:", error);
       }
     };
 
     fetchEnrolledCourses();
   }, []);
 
-  const nextSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % enrolledCourses.length);
-  };
-
-  const prevSlide = () => {
-    setCurrentIndex(
-      (prevIndex) => (prevIndex - 1 + enrolledCourses.length) % enrolledCourses.length
-    );
+  const settings = {
+    dots: false,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    arrows: true,
+    responsive: [
+      { breakpoint: 1024, settings: { slidesToShow: 2 } },
+      { breakpoint: 768, settings: { slidesToShow: 1 } }
+    ]
   };
 
   if (enrolledCourses.length === 0) {
-    return <p>No enrolled courses to display.</p>;
+    return <p className="no-courses">No enrolled courses to display.</p>;
   }
 
   return (
-    <div className="studentSliderContainer">
-      <button className="sliderPrevButton" onClick={prevSlide}>
-        &#10094;
-      </button>
-
-      <div
-        className="sliderTrack"
-        style={{ transform: `translateX(-${currentIndex * 100}%)`, display: "flex", transition: "transform 0.5s ease" }}
-      >
-        {enrolledCourses.map((course) => (
-          <StudentCard
-            key={course.id}
-            id={course.id}
-            title={course.title}
-            img={course.image_url} // Update field name if different in API response
-            instructor={course.instructor}
-          />
-        ))}
+    <div className="student-slider-wrapper">
+      <div className="student-slider-header">
+        <h2>Continue Learning</h2>
+        <a href="/mylearning" className="my-learning-link">My Learning</a>
       </div>
 
-      <button className="sliderNextButton" onClick={nextSlide}>
-        &#10095;
-      </button>
+      <Slider {...settings}>
+        {enrolledCourses.map((course) => (
+          <div key={course.id} className="course-card">
+            <div className="thumbnail">
+              <img src={course.image_url} alt={course.title} />
+              <div className="play-button">▶</div>
+            </div>
+            <div className="details">
+              <p className="course-title">{course.title}</p>
+              <p className="lecture-title">{course.instructor}</p>
+              <p className="lecture-time">Lecture • 5 min left</p>
+              <div className="progress-bar">
+                <div className="progress" style={{ width: "30%" }}></div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </Slider>
     </div>
   );
 }

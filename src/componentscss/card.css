@@ -1,0 +1,78 @@
+.courseCard {
+    width: 250px;
+    background-color: #fff;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.3s ease;
+  }
+  
+  .courseCard:hover {
+    transform: translateY(-5px);
+  }
+  
+  .cardImg {
+    width: 100%;
+    height: 160px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f7f7f7;
+  }
+  
+  .cardImg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .cardContent {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex-grow: 1;
+  }
+  
+  .cardContent h2 {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin: 0;
+    color: #333;
+    min-height: 2.2em; /* ensures consistent height for 2-line titles */
+  }
+  
+  .cardContent p {
+    font-size: 0.95rem;
+    color: #666;
+    margin: 0;
+  }
+  
+  .cardContent button {
+    margin-top: auto;
+    padding: 0.5rem 1rem;
+    background-color: #7400B1 !important;
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .cardContent button:hover {
+    background-color: #2F0B65 !important;
+  }
+  
+  .deleteButton {
+    margin-top: 0.5rem;
+    background-color: #dc3545;
+  }
+  
+  .deleteButton:hover {
+    background-color: #a71d2a;
+  }
+  

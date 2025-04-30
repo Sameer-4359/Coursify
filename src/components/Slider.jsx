@@ -1,77 +1,29 @@
 import React, { useState, useEffect } from "react";
 import Card from "./Card";
+import "../componentscss/slider.css";
 
-
-import "../componentscss/slider.css"
-import { faBold } from "@fortawesome/free-solid-svg-icons";
-
-/*function Slider() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [items, setItems] = useState([]);
-
-  useEffect(() => {
-    // Fetch courses from the backend
-    const fetchCourses = async () => {
-      try {
-        const response = await fetch("http://localhost:5000/api/courses");
-        const data = await response.json();
-        setItems(data);
-      } catch (error) {
-        console.error("Error fetching courses:", error);
-      }
-    };
-
-    fetchCourses();
-  }, []);
-
-  const nextSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % items.length);
-  };
-
-  const prevSlide = () => {
-    setCurrentIndex(
-      (prevIndex) => (prevIndex - 1 + items.length) % items.length
-    );
-  };
-
-  return (
-    <div className="sliderContainer">
-      <button className="prevButton" onClick={prevSlide}>
-        &#10094;
-      </button>
-
-      <div className="sliderTrack" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
-  {items.map((item, index) => (
-    <Card
-      key={item.id} // Use item.id instead of index for unique keys
-      id={item.id} // Pass the id to the Card component
-      img={item.img} // Make sure item.img exists in your backend response
-      title={item.title} // Make sure item.title exists in your backend response
-      instructor={item.instructor} // Make sure item.instructor exists in your backend response
-      price={`$${item.price}`} // Format the price appropriately
-    />
-  ))}
-</div>
-
-
-      <button className="nextButton" onClick={nextSlide}>
-        &#10095;
-      </button>
-    </div>
-  );
-}
-
-export default Slider;*/
 function Slider({ role }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [items, setItems] = useState([]);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+  const itemsPerPage = 4;
 
   useEffect(() => {
     const fetchCourses = async () => {
       try {
         const response = await fetch("http://localhost:5000/api/courses");
         const data = await response.json();
-        setItems(data);
+
+        // Fill last slide if needed by repeating from the beginning
+        const remainder = data.length % itemsPerPage;
+        if (remainder !== 0) {
+          const itemsToAdd = itemsPerPage - remainder;
+          const clonedItems = [...data, ...data.slice(0, itemsToAdd)];
+          setItems(clonedItems);
+        } else {
+          setItems(data);
+        }
       } catch (error) {
         console.error("Error fetching courses:", error);
       }
@@ -79,37 +31,33 @@ function Slider({ role }) {
     fetchCourses();
   }, []);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const totalSlides = Math.ceil(items.length / itemsPerPage);
+
   const nextSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % items.length);
+    if (currentIndex < totalSlides - 1) {
+      setCurrentIndex((prev) => prev + 1);
+    }
   };
 
   const prevSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + items.length) % items.length);
+    if (currentIndex > 0) {
+      setCurrentIndex((prev) => prev - 1);
+    }
   };
 
-
-  /*const handleDelete = async (id) => {
-    if (role !== "admin") return; // Ensure only admins can delete
-
-    try {
-      const token = localStorage.getItem("token");
-      await fetch(`http://localhost:5000/api/courses/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setItems(items.filter((item) => item.id !== id)); // Update state
-    } catch (error) {
-      console.error("Error deleting course:", error);
-    }
-  };*/
-
-  return (
-    <div className="sliderContainer">
-      <button className="prevButton" onClick={prevSlide}>&#10094;</button>
-      <div className="sliderTrack" style={{ transform: `translateX(-${currentIndex * 100}%)` }}>
-        {items.map((item) => (
+  if (isMobile) {
+    const mobileItems = items.slice(0, 6);
+    return (
+      <div className="mobileCardWrapper">
+        {mobileItems.map((item) => (
           <Card
             key={item.id}
             id={item.id}
@@ -117,17 +65,50 @@ function Slider({ role }) {
             title={item.title}
             instructor={item.instructor}
             price={`$${item.price}`}
-            role={role} // Pass role to Card
+            role={role}
           />
         ))}
       </div>
-      <button className="nextButton" onClick={nextSlide}>&#10095;</button>
+    );
+  }
+
+  const startIndex = currentIndex * itemsPerPage;
+  const visibleItems = items.slice(startIndex, startIndex + itemsPerPage);
+
+  return (
+    <div className="sliderContainer">
+      <button
+        className="sliderButton"
+        onClick={prevSlide}
+        disabled={currentIndex === 0}
+      >
+        &#10094;
+      </button>
+
+      <div className="sliderCardsWrapper">
+        {visibleItems.map((item) => (
+          <Card
+            key={item.id + "-" + startIndex} // Ensure unique key
+            id={item.id}
+            img={item.img}
+            title={item.title}
+            instructor={item.instructor}
+            price={`$${item.price}`}
+            role={role}
+          />
+        ))}
+      </div>
+
+      <button
+        className="sliderButton"
+        onClick={nextSlide}
+        disabled={currentIndex === totalSlides - 1}
+      >
+        &#10095;
+      </button>
     </div>
   );
 }
 
 export default Slider;
-
-
-
 

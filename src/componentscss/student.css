@@ -1,154 +1,168 @@
-body {
-    margin: 0;
-    padding: 0;
-    font-family: "Roboto", sans-serif;
-    background-color: #f9f9f9;
-    color: #333;
-  }
-  
-  .studentDashboard {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+   .studentDashboard {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f9fafb;
+    padding-bottom: 2rem;
   }
   
   .dashboardWelcome {
+    height: 100vh;
+    width: 100%;
     text-align: center;
-    padding: 30px 20px;
-    background: linear-gradient(135deg, #007991, #75d9ec);
+    padding: 3rem 1rem 2rem;
+    /* background-color: #4f46e5; */
+    background-image: url('/public/images/welcome.png');
+    background-size:cover;
+    align-content: center;
     color: white;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 0 0 20px 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    margin-top: -72px;
+    
   }
   
   .dashboardWelcome h1 {
-    font-size: 2.5rem;
-    margin-bottom: 10px;
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+    text-align: center;
   }
   
   .dashboardWelcome p {
     font-size: 1.2rem;
-    margin-top: 0;
+    color: #e0e7ff;
+  }
+
+  @keyframes slideInLeft {
+    from {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  .slide-in-left {
+    animation: slideInLeft 0.8s ease-out forwards;
+  }
+  .slide-in-left-delay {
+    animation: fadeIn  0.8s ease-out forwards;
+    animation-delay: 0.9s; /* Slightly more than the duration of the first */
+    opacity: 0; /* Ensure it's hidden before animation starts */
   }
   
   .dashboardSummary {
-    padding: 20px;
-    background: #ffffff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin: 20px auto;
-    max-width: 1200px;
-    border-radius: 10px;
+    width: 80%;
+    margin-top: -2rem;
+    margin-left: 100px;
+    padding: 2rem 2rem 0;
   }
   
-  .summaryCards {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-    flex-wrap: wrap;
+  .summaryCards { 
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
   }
   
   .summaryCard {
-    flex: 1 1 200px;
-    background: #f1f8e9;
-    padding: 20px;
-    border-radius: 10px;
+    background-color: white;
+    border-radius: 12px;
+    padding: 1.5rem;
     text-align: center;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
   
   .summaryCard:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(79, 70, 229, 0.1);
   }
   
   .summaryCard h2 {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-    color: #007991;
+    color: #4b5563;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
   }
   
   .summaryCard p {
-    font-size: 1.2rem;
-    font-weight: bold;
+    font-size: 1.5rem;
+    color: #111827;
+    font-weight: 600;
   }
   
-  /* Sliders Section */
   .dashboardSliders {
-    padding: 20px;
-    background: #fafafa;
-    margin: 20px auto;
-    max-width: 1200px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
   }
   
   .sliderSection {
-    margin-bottom: 30px;
+    width: 100%;
+    justify-self: center;
+    margin-bottom: 3rem;
   }
   
   .sliderSection h2 {
-    font-size: 1.8rem;
-    margin-bottom: 15px;
-    color: #333;
-    border-bottom: 2px solid #007991;
-    display: inline-block;
-    padding-bottom: 5px;
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+    color: #1f2937;
   }
   
-  /* Feedback Section */
   .feedbackSection {
     text-align: center;
-    padding: 30px;
-    background: #e8f5e9;
-    border-radius: 10px;
-    margin: 20px auto;
-    max-width: 800px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 2rem;
+    padding: 2rem;
+    background-color: #eef2ff;
+    border-radius: 12px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
   }
   
   .feedbackSection h2 {
-    font-size: 1.8rem;
-    margin-bottom: 20px;
-    color: #333;
+    font-size: 1.5rem;
+    color: #374151;
+    margin-bottom: 1rem;
   }
   
   .feedbackButton {
-    padding: 10px 20px;
-    font-size: 1.1rem;
-    background-color: #ff9635;
-    color: #ffffff;
+    padding: 0.75rem 1.5rem;
+    background-color: #4f46e5;
+    color: white;
     border: none;
-    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    transition: background-color 0.3s ease;
   }
   
   .feedbackButton:hover {
-    background-color: #ff7b2e;
-    transform: translateY(-2px);
+    background-color: #4338ca;
   }
   
-  /* Responsive Design */
   @media (max-width: 768px) {
     .dashboardWelcome h1 {
       font-size: 2rem;
     }
-  
-    .summaryCards {
-      flex-direction: column;
-    }
-  
-    .summaryCard {
-      margin-bottom: 20px;
-    }
-  
-    .dashboardSliders,
     .dashboardSummary {
-      padding: 15px;
+      width: 90%;
+      margin-left: 5%;
     }
   
-    .feedbackSection {
-      padding: 20px;
+    .summaryCard h2 {
+      font-size: 1rem;
+    }
+  
+    .summaryCard p {
+      font-size: 1.3rem;
     }
   }
   

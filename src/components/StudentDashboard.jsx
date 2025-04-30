@@ -61,71 +61,77 @@ function StudentDashboard() {
 
     fetchEnrolledCoursesCount();
   }, []);
+  
 
   return (
 
-    
-    <div className="studentDashboard">
-      {/* Menu */}
+    <div>
       <Menu />
+      <div className="studentDashboard">
+        {/* Welcome Section */}
+        <div className="dashboardWelcome">
+        <h1 className="slide-in-left text-4xl font-bold text-gray-800">
+          WELCOME !
+        </h1>
+          <h2 className="slide-in-left text-4xl font-bold text-gray-800"> {studentName}</h2>
+          <p className="slide-in-left-delay text-2xl text-gray-600 mt-2">
+            Ready to continue learning? Here's your personalized dashboard.
+          </p>
+        </div>
 
-      {/* Welcome Section */}
-      <div className="dashboardWelcome">
-        <h1>Welcome, {studentName}!</h1>
-        <p>Ready to continue learning? Here's your personalized dashboard.</p>
-      </div>
-
-      {/* Summary Section */}
-      <div className="dashboardSummary">
-        <div className="summaryCards">
-          <div className="summaryCard">
-            <h2>Total Enrolled Courses</h2>
-            <p>{enrolledCoursesCount}</p>
-          </div>
-          <div className="summaryCard">
-            <h2>Completed Courses</h2>
-            <p>5</p>
-          </div>
-          <div className="summaryCard">
-            <h2>Upcoming Deadlines</h2>
-            <p>2 Assignments</p>
-          </div>
-          <div className="summaryCard">
-            <h2>Total Hours Spent</h2>
-            <p>25 Hours</p>
+        {/* Summary Section */}
+        <div className="headings">
+          <h1>Overview</h1>
+        </div>
+        <div className="dashboardSummary">
+          <div className="summaryCards">
+            <div className="summaryCard">
+              <h2>Total Enrolled Courses</h2>
+              <p>{enrolledCoursesCount}</p>
+            </div>
+            <div className="summaryCard">
+              <h2>Completed Courses</h2>
+              <p>5</p>
+            </div>
+            <div className="summaryCard">
+              <h2>Upcoming Deadlines</h2>
+              <p>2 Assignments</p>
+            </div>
+            <div className="summaryCard">
+              <h2>Total Hours Spent</h2>
+              <p>25 Hours</p>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Courses Sliders */}
-      <div className="dashboardSliders">
-        <div className="sliderSection">
-          <h2>Your Enrolled Courses</h2>
-          <StudentSlider />
+        {/* Courses Sliders */}
+        <div className="dashboardSliders">
+          <div className="sliderSection">
+            <StudentSlider />
+          </div>
+          <div className="sliderSection">
+            <h1 className="headings">What to Learn Next</h1>
+            <h3 className="headings">Recommended for you</h3>
+            <Slider role="Student" />
+          </div>
         </div>
-        <div className="sliderSection">
-          <h2>Explore More Courses</h2>
-          <Slider role="Student" />
+
+        {/* Feedback Section */}
+        <div className="feedbackSection">
+          <h2>Share Your Feedback</h2>
+          <button className="feedbackButton" onClick={() => setIsFeedbackOpen(true)}>
+            Give Feedback
+          </button>
         </div>
+
+        {isFeedbackOpen && (
+          <FeedbackDialog
+            onClose={() => setIsFeedbackOpen(false)}
+            onSubmit={handleSubmitFeedback}
+          />
+        )}
       </div>
-
-      {/* Feedback Section */}
-<div className="feedbackSection">
-  <h2>Share Your Feedback</h2>
-  <button className="feedbackButton" onClick={() => setIsFeedbackOpen(true)}>
-    Give Feedback
-  </button>
-</div>
-
-{isFeedbackOpen && (
-  <FeedbackDialog
-    onClose={() => setIsFeedbackOpen(false)}
-    onSubmit={handleSubmitFeedback}
-  />
-)}
-
-      {/* Footer */}
-     // <Footer />
+      <Footer />
     </div>
   );
 }
