@@ -4,6 +4,8 @@ import InstructorSlider from "./InstructorSlider";
 import Footer from "./Footer.jsx";
 import { useNavigate } from "react-router-dom";
 import "../componentscss/instructordashboard.css";
+import FeedbackDialog from "./FeedbackDialog";
+
 
 function InstructorDashboard() {
   const [courses, setCourses] = useState([]); // State for storing courses
@@ -15,6 +17,20 @@ function InstructorDashboard() {
   });
 
   const navigate = useNavigate(); // For navigation
+  const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
+
+  const handleSubmitFeedback = async (feedbackText) => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.post("http://localhost:5000/api/website/instructor/feedback", 
+        { feedback: feedbackText }, 
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      alert("Feedback submitted successfully!");
+    } catch (error) {
+      console.error("Failed to submit feedback:", error);
+    }
+  };
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -116,6 +132,21 @@ function InstructorDashboard() {
           Add New Course
         </button>
       </div>
+
+      {/* Feedback Section */}
+<div className="feedbackSection">
+  <h2>Share Your Feedback</h2>
+  <button className="feedbackButton" onClick={() => setIsFeedbackOpen(true)}>
+    Give Feedback
+  </button>
+</div>
+
+{isFeedbackOpen && (
+  <FeedbackDialog
+    onClose={() => setIsFeedbackOpen(false)}
+    onSubmit={handleSubmitFeedback}
+  />
+)}
 
       <Footer />
     </div>

@@ -5,11 +5,26 @@ import StudentSlider from "./StudentSlider";
 import Slider from "./Slider";
 import axios from "axios";
 import "../componentscss/student.css";
+import FeedbackDialog from "./FeedbackDialog";
 
 function StudentDashboard() {
   const [studentName, setStudentName] = useState("Student");
   const [enrolledCoursesCount, setEnrolledCoursesCount] = useState(0);
+  const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
 
+  const handleSubmitFeedback = async (feedbackText) => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.post("http://localhost:5000/api/website/student/feedback", 
+        { feedback: feedbackText }, 
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      alert("Feedback submitted successfully!");
+    } catch (error) {
+      console.error("Failed to submit feedback:", error);
+    }
+  };
+  
   useEffect(() => {
     // Retrieve the username from localStorage
     const storedUsername = localStorage.getItem("username");
@@ -18,6 +33,8 @@ function StudentDashboard() {
     } else {
       console.warn("Username not found in localStorage.");
     }
+
+    
 
     // Fetch the count of enrolled courses
     const fetchEnrolledCoursesCount = async () => {
@@ -93,10 +110,19 @@ function StudentDashboard() {
       </div>
 
       {/* Feedback Section */}
-      <div className="feedbackSection">
-        <h2>Share Your Feedback</h2>
-        <button className="feedbackButton">Give Feedback</button>
-      </div>
+<div className="feedbackSection">
+  <h2>Share Your Feedback</h2>
+  <button className="feedbackButton" onClick={() => setIsFeedbackOpen(true)}>
+    Give Feedback
+  </button>
+</div>
+
+{isFeedbackOpen && (
+  <FeedbackDialog
+    onClose={() => setIsFeedbackOpen(false)}
+    onSubmit={handleSubmitFeedback}
+  />
+)}
 
       {/* Footer */}
      // <Footer />

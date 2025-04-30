@@ -1,0 +1,55 @@
+.dialogOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .dialogBox {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    min-width: 300px;
+    text-align: center;
+  }
+  
+  .feedbackTextarea {
+    width: 100%;
+    height: 100px;
+    margin-top: 10px;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    resize: none;
+  }
+  
+  .dialogActions {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  .submitButton {
+    background-color: #6a0dad;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .cancelButton {
+    background-color: #ccc;
+    color: black;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  

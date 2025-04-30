@@ -13,6 +13,7 @@ const adminRoutes = require("./routes/adminRoute");
 const path = require("path");
 const uploadRoutes = require("./routes/uploadRoutes");
 const googleOAuthRoutes = require("./routes/googleOAuthDirect");
+const feedbackRoutes = require('./routes/feedbackRoutes');
 
 
 require("dotenv").config();
@@ -48,6 +49,8 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api", require("./routes/lessonRoutes"));
 app.use("/api/google-direct", googleOAuthRoutes);
+app.use('/api/website', feedbackRoutes);
+
 
 
 // API to save certificate image

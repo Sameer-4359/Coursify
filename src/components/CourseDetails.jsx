@@ -235,7 +235,7 @@ const CourseDetails = () => {
         />
         <div className="course-info">
           <h1 className="course-title">{course.title}</h1>
-          <p className="course-instructor">Instructor: {course.instructorName}</p>
+          <p className="course-instructor">Instructor: {course.instructor}</p>
           <p className="course-price">Price: ${course.price}</p>
           {/* Add to Cart Button with onClick handler */}
     {!isEnrolled && role === "Student" && (

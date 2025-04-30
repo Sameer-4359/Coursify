@@ -67,9 +67,24 @@ function Menu() {
             <CourseSearchBar />
           </div>
           <Nav className="ms-auto">
-            <Nav.Link href="/home" className="nav-link">
-              Home
-            </Nav.Link>
+          <Nav.Link
+  className="nav-link"
+  onClick={() => {
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
+
+    if (token && role === "Student") {
+      navigate("/studentdashboard");
+    } else if (token && role === "Instructor") {
+      navigate("/instructordashboard");
+    } else {
+      navigate("/home");
+    }
+  }}
+>
+  Home
+</Nav.Link>
+
             <Nav.Link href="/courses" className="nav-link">
               Courses
             </Nav.Link>
