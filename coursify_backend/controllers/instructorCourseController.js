@@ -221,6 +221,7 @@
 
 const db = require("../config/db");
 
+
 // Fetch all courses for a specific instructor
 exports.getCourses = async (req, res) => {
   const loggedInInstructorId = req.instructorId;
@@ -265,8 +266,8 @@ exports.addCourse = async (req, res) => {
 
       for (const lesson of module.lessons) {
         await db.query(
-          "INSERT INTO lessons (module_id, title, video_url,course_id) VALUES ($1, $2, $3,$4)",
-          [moduleId, lesson.title, lesson.video_url ,courseId|| null]
+          "INSERT INTO lessons (module_id, title, video_url,course_id,assignment_url) VALUES ($1, $2, $3,$4,$5)",
+          [moduleId, lesson.title, lesson.video_url ,courseId,lesson.assignment_url|| null]
         );
       }
     }
@@ -326,8 +327,8 @@ exports.updateCourse = async (req, res) => {
 
       for (const lesson of module.lessons) {
         await client.query(
-          "INSERT INTO lessons (title, module_id, video_url,course_id) VALUES ($1, $2, $3,$4)",
-          [lesson.title, moduleId, lesson.video_url,courseId || null]
+          "INSERT INTO lessons (title, module_id, video_url,course_id,assignment_url) VALUES ($1, $2, $3,$4,$5)",
+          [lesson.title, moduleId, lesson.video_url,courseId,lesson.assignment_url || null]
         );
       }
     }
@@ -359,7 +360,7 @@ exports.getCourseDetails = async (req, res) => {
             'id', m.id,
             'title', m.title,
             'lessons', (
-              SELECT json_agg(json_build_object('id', l.id, 'title', l.title, 'video_url', l.video_url)) 
+              SELECT json_agg(json_build_object('id', l.id, 'title', l.title, 'video_url', l.video_url,'assignment_url',l.assignment_url)) 
               FROM lessons l 
               WHERE l.module_id = m.id
             )
@@ -388,12 +389,12 @@ exports.getCourseDetails = async (req, res) => {
 // Update a specific lesson
 exports.updateLesson = async (req, res) => {
   const { lessonId } = req.params;
-  const { title, video_url } = req.body;
+  const { title, video_url ,assignment_url} = req.body;
 
   try {
     const result = await db.query(
-      "UPDATE lessons SET title = $1, video_url = $2 WHERE id = $3 RETURNING *",
-      [title, video_url, lessonId]
+      "UPDATE lessons SET title = $1, video_url = $2 , assignment_url=$3 WHERE id = $4 RETURNING *",
+      [title, video_url,assignment_url, lessonId]
     );
 
     if (result.rowCount === 0) {
@@ -478,7 +479,7 @@ exports.deleteCourse = async (req, res) => {
 
     // Get all video URLs from lessons before deleting them
     const lessonsResult = await client.query(
-      "SELECT video_url FROM lessons WHERE module_id IN (SELECT id FROM modules WHERE course_id = $1)",
+      "SELECT video_url,assignment_url FROM lessons WHERE module_id IN (SELECT id FROM modules WHERE course_id = $1)",
       [courseId]
     );
 
@@ -488,6 +489,11 @@ exports.deleteCourse = async (req, res) => {
         const publicId = lesson.video_url.split("/").pop().split(".")[0]; // Extract public ID
         await cloudinary.uploader.destroy(publicId);
       }
+      if (lesson.assignment_url) {
+        const publicId = lesson.assignment_url.split("/").pop().split(".")[0];
+        await cloudinary.uploader.destroy(publicId, { resource_type: "raw" }); // Cloudinary raw file delete
+      }
+      
     }
 
     // Delete lessons

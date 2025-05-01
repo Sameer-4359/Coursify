@@ -255,11 +255,12 @@ const CourseDetails = () => {
 
       {/* Curriculum Section */}
       <div className="course-curriculum">
-  <h2>Curriculum</h2>
+  <h2>Curriculum </h2>
   {course.modules?.length > 0 ? (
     course.modules.map((module) => (
       <div key={module.id} className="module">
         <h3 className="module-title">
+        
           {role === "Student" && isEnrolled && (
             <input
               type="checkbox"
@@ -281,6 +282,12 @@ const CourseDetails = () => {
                   />
                 )}
                 {lesson.title}
+                {/* {lesson.assignment_url} */}
+                {isEnrolled}
+                {/* {role} */}
+                
+                
+                
               </label>
 
               {/* Video Section - Visible only to enrolled Students and Instructors */}
@@ -290,6 +297,36 @@ const CourseDetails = () => {
                   Your browser does not support the video tag.
                 </video>
               )}
+
+{(isEnrolled || role === "Instructor") && lesson.assignment_url && (
+  <div>
+    <h4>Assignment Preview:</h4>
+    
+    {/* PDF Preview using Google Docs Viewer */}
+    <iframe
+      src={`https://docs.google.com/gview?url=${encodeURIComponent(lesson.assignment_url)}&embedded=true`}
+      width="100%"
+      height="300px"
+      frameBorder="0"
+      title="PDF Preview"
+    ></iframe>
+
+    
+<div style={{ marginTop: "10px" }}>
+      {(() => {
+        const downloadUrl = lesson.assignment_url.includes("/upload/")
+          ? lesson.assignment_url.replace("/upload/", "/upload/fl_attachment/")
+          : lesson.assignment_url;
+        return (
+          <a href={downloadUrl} target="_blank" rel="noopener noreferrer">
+            📥 Download Assignment PDF
+          </a>
+        );
+      })()}
+    </div>
+  </div>
+)}
+
 
               {/* Instructor Upload Section */}
               {/* {role === "Instructor" && (

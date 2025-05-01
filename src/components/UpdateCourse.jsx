@@ -94,6 +94,23 @@ const UpdateCourse = () => {
     });
 };
 
+const handlePdfUpload = (moduleIndex, lessonIndex, file) => {
+  setCourseDetails(prevState => {
+    const updatedModules = [...prevState.modules];
+    const updatedLessons = [...updatedModules[moduleIndex].lessons];
+
+    if (typeof updatedLessons[lessonIndex] !== "object") {
+      updatedLessons[lessonIndex] = { title: updatedLessons[lessonIndex], video: null, pdf: null };
+    }
+
+    updatedLessons[lessonIndex].pdf = file;
+    updatedModules[moduleIndex] = { ...updatedModules[moduleIndex], lessons: updatedLessons };
+
+    return { ...prevState, modules: updatedModules };
+  });
+};
+
+
   
 
   // Add a new module
@@ -169,35 +186,36 @@ const UpdateCourse = () => {
         console.log("✅ Fetched updated lesson IDs:", lessonsWithIds);
 
         // Step 3: Upload videos for lessons that have new video files
-        for (let moduleIndex in courseDetails.modules) {
-            for (let lessonIndex in courseDetails.modules[moduleIndex].lessons) {
-                const lesson = courseDetails.modules[moduleIndex].lessons[lessonIndex];
+        // Step 4: Upload PDFs for lessons that have new PDF files
+for (let moduleIndex in courseDetails.modules) {
+  for (let lessonIndex in courseDetails.modules[moduleIndex].lessons) {
+    const lesson = courseDetails.modules[moduleIndex].lessons[lessonIndex];
 
-                if (lesson.video && lesson.video instanceof File) {
-                    // Find correct lessonId based on title
-                    const matchingLesson = lessonsWithIds.find(l => l.title === lesson.title);
-                    if (!matchingLesson) {
-                        console.error("❌ No matching lesson found for:", lesson.title);
-                        continue;
-                    }
+    if (lesson.pdf && lesson.pdf instanceof File) {
+      const matchingLesson = lessonsWithIds.find(l => l.title === lesson.title);
+      if (!matchingLesson) {
+        console.error("❌ No matching lesson found for:", lesson.title);
+        continue;
+      }
 
-                    const formData = new FormData();
-                    formData.append("video", lesson.video);
-                    formData.append("lessonId", matchingLesson.id);
-                    formData.append("courseId", courseId);
+      const formData = new FormData();
+      formData.append("pdf", lesson.pdf);
+      formData.append("lessonId", matchingLesson.id);
+      formData.append("courseId", courseId);
 
-                    console.log("✅ Uploading video for lesson ID:", matchingLesson.id);
+      console.log("📄 Uploading PDF for lesson ID:", matchingLesson.id);
 
-                    await fetch("http://localhost:5000/api/upload/upload-video", {
-                        method: "POST",
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                        body: formData,
-                    });
-                }
-            }
-        }
+      await fetch("http://localhost:5000/api/uploads/upload-assignment", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
+    }
+  }
+}
+
 
         alert("Course updated successfully!");
         navigate(`/instructorDashboard`);
@@ -261,6 +279,8 @@ const UpdateCourse = () => {
                   <div key={lessonIndex} className="lesson-block">
                     <input type="text" placeholder={`Lesson ${lessonIndex + 1}`} value={lesson.title} onChange={(e) => handleLessonChange(moduleIndex, lessonIndex, e.target.value)} className="lesson-input" />
                     <input type="file" accept="video/*" onChange={(e) => handleVideoUpload(moduleIndex, lessonIndex, e.target.files[0])} className="video-upload" />
+                    <input type="file" accept="application/pdf" onChange={(e) => handlePdfUpload(moduleIndex, lessonIndex, e.target.files[0])} className="pdf-upload" />
+
                   </div>
                 ))}
               <button
