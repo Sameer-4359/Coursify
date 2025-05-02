@@ -85,7 +85,7 @@ function Menu() {
   Home
 </Nav.Link>
 
-            <Nav.Link href="/courses" className="nav-link">
+            <Nav.Link href="/Courses" className="nav-link">
               Courses
             </Nav.Link>
             <Nav.Link href="/aboutus" className="nav-link">

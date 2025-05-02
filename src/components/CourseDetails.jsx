@@ -1,147 +1,399 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
-import Footer from "./Footer";
+import { useParams, useNavigate } from "react-router-dom"; // Import useNavigate here
+import axios from "axios";import Footer from "./Footer";
 import Menu from "./Menu";
 import "../componentscss/coursedetails.css";
 
-// Subcomponent: Course Header
-const CourseHeader = ({ course, role, isEnrolled, onAddToCart }) => (
-  <div className="course-header">
-    <img src={course.image_url} alt={course.title} className="course-image" />
-    <div className="course-info">
-      <h1 className="course-title">{course.title}</h1>
-      <p className="course-instructor">Instructor: {course.instructor}</p>
-      <p className="course-price">Price: ${course.price}</p>
-      {!isEnrolled && role === "Student" && (
-        <button className="add-to-cart-button" onClick={onAddToCart}>
-          Add to Cart
-        </button>
-      )}
-    </div>
-  </div>
-);
 
-// Subcomponent: Module Item
-const ModuleItem = ({ module, role, isEnrolled, onToggleLesson }) => {
-  const isModuleCompleted = (moduleLessons) => 
-    moduleLessons?.length === module.lessons.length;
+const CourseDetails = () => {
+  const { courseId } = useParams();
+  const navigate = useNavigate(); // Define navigate here
+  const [course, setCourse] = useState(null);
+  const [reviews, setReviews] = useState([]); // Separate state for reviews
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [completedLessons, setCompletedLessons] = useState({});
+  const [reviewInput, setReviewInput] = useState({ rating: "", text: "" });
+  const [isEnrolled, setIsEnrolled] = useState(false);
+  const [userRole, setUserRole] = useState(""); // Get role from auth context
+
+  
+  const role = localStorage.getItem("role"); // Fetch the role from localStorage or API
+
+  // Add course to cart
+  const handleAddCourse = async (courseId) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        "http://localhost:5000/api/cart/add",
+        { courseId },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      alert(response.data.message);
+    } catch (err) {
+      console.error("Error adding course to cart:", err);
+      alert(err.response?.data?.message || "Failed to add course to cart.");
+    }
+  };
+
+  // Fetch course details and reviews
+  useEffect(() => {
+    const fetchCourseDetails = async () => {
+      try {
+        const [courseResponse, reviewsResponse] = await Promise.all([
+          axios.get(`http://localhost:5000/api/instructor/courses/${courseId}/details`),
+          axios.get(`http://localhost:5000/api/courses/${courseId}/reviews`)
+        ]);
+      
+
+        setCourse(courseResponse.data);
+        setReviews(reviewsResponse.data); // Set reviews state
+      } catch (err) {
+        console.error("Error fetching course details or reviews:", err);
+        setError("Failed to load course details or reviews.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCourseDetails();
+  }, [courseId]);
+  
+  // Toggle lesson completion
+  const toggleLessonCompletion = (moduleId, lessonIndex) => {
+    setCompletedLessons((prev) => {
+      const updated = { ...prev };
+      const moduleLessons = updated[moduleId] || [];
+      if (moduleLessons.includes(lessonIndex)) {
+        updated[moduleId] = moduleLessons.filter((index) => index !== lessonIndex);
+      } else {
+        updated[moduleId] = [...moduleLessons, lessonIndex];
+      }
+      return updated;
+    });
+  };
+
+  //check if student is enrolled in a course
+   
+  useEffect(() => {
+    async function checkEnrollment() {
+      try {
+        const response = await fetch(`http://localhost:5000/api/courses/${courseId}/enrollment-status`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`, // Include token if needed
+          },
+        });
+
+        const data = await response.json();
+        if (data.enrolled) {
+          setIsEnrolled(true);
+        }
+      } catch (error) {
+        console.error("Error checking enrollment status:", error);
+      }
+    }
+
+    checkEnrollment();
+  }, [courseId]);
+
+
+
+
+  // Check if a module is completed
+  const isModuleCompleted = (module) => {
+    const moduleLessons = completedLessons[module.id] || [];
+    return moduleLessons.length === module.lessons.length;
+  };
+
+  // Submit review
+  const handleReviewSubmit = async (e) => {
+    e.preventDefault();
+  
+    // Ensure reviewInput is valid
+    console.log("Review Input State:", reviewInput);
+    if (!reviewInput || !reviewInput.rating || !reviewInput.text) {
+      alert("Please fill out all fields.");
+      return;
+    }
+  
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        alert("You must be logged in to submit a review.");
+        return;
+      }
+  
+      if (!courseId) {
+        alert("Course ID is missing.");
+        return;
+      }
+  
+      // Send review data with matching field names
+      const { data } = await axios.post(
+        `http://localhost:5000/api/courses/${courseId}/reviews`,
+        { rating: reviewInput.rating, reviewText: reviewInput.text }, // Ensure the field names match
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("Review submitted successfully:", data);
+      alert("Review submitted successfully")
+    } catch (err) {
+      console.error("Error details:", err.response?.data || err);
+  
+      const errorMessage =
+        err.response?.data?.message || err.message || "Failed to submit review. Please try again.";
+      alert(errorMessage);
+    }
+  };
+
+  const studentId = localStorage.getItem("studentId"); // Fetch student ID from storage or state
+
+  const isCourseCompleted = () => {
+    return (
+      course?.modules?.every((module) =>
+        completedLessons[module.id]?.length === module.lessons.length
+      ) || false
+    );
+  };
+
+  const handleGenerateCertificate = () => {
+    if (!isCourseCompleted()) {
+      alert("Complete all modules to generate a certificate.");
+      return;
+    }
+
+    navigate(`/certificate`, {
+      state: {
+        studentData: {
+          name: localStorage.getItem("username") || "Student Name",
+          courseName: course?.title || "Course Title",
+          completionDate: new Date().toLocaleDateString(),
+        },
+      },
+      
+    });
+    //alert(studentData.name);
+  };
+
+  const handleVideoUpload = async (e, moduleId) => {
+    e.preventDefault();
+    if (!videoFile) {
+      alert("Please select a video file to upload.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("video", videoFile);
+    formData.append("moduleId", moduleId);
+
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post("http://localhost:5000/api/upload/upload-video", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      alert("Video uploaded successfully");
+      setLessons([...lessons, response.data]);
+    } catch (error) {
+      console.error("Error uploading video:", error);
+      alert("Failed to upload video.");
+    }
+  };
+
+
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p className="error">{error}</p>;
+  }
+
+  if (!course) {
+    return <p>No course details found.</p>;
+  }
 
   return (
-    <div className="module">
-      <h3 className="module-title">
-        {role === "Student" && isEnrolled && (
-          <input
-            type="checkbox"
-            checked={isModuleCompleted(completedLessons[module.id])}
-            readOnly
-          />
-        )}
-        {module.title}
-      </h3>
-      <ul>
-        {module.lessons.map((lesson, index) => (
-          <LessonItem 
-            key={index}
-            lesson={lesson}
-            moduleId={module.id}
-            index={index}
-            role={role}
-            isEnrolled={isEnrolled}
-            onToggleLesson={onToggleLesson}
-          />
-        ))}
-      </ul>
-    </div>
-  );
-};
+    <div>
+     <Menu />
 
-// Subcomponent: Lesson Item
-const LessonItem = ({ lesson, moduleId, index, role, isEnrolled, onToggleLesson }) => (
-  <li className="course-lesson">
-    <label>
-      {role === "Student" && isEnrolled && (
-        <input
-          type="checkbox"
-          checked={completedLessons[moduleId]?.includes(index)}
-          onChange={() => onToggleLesson(moduleId, index)}
+    <div className="course-detail">
+      {/* Header Section */}
+      <div className="course-header">
+        <img
+          src={course.image_url}
+          alt={course.title}
+          className="course-image"
         />
-      )}
-      {lesson.title}
-    </label>
+        <div className="course-info">
+          <h1 className="course-title">{course.title}</h1>
+          <p className="course-instructor">Instructor: {course.instructor}</p>
+          <p className="course-price">Price: ${course.price}</p>
+          {/* Add to Cart Button with onClick handler */}
+          {!isEnrolled && role === "Student" && (
+            <button className="add-to-cart-button" onClick={() => handleAddCourse(courseId)}>
+              Add to Cart
+            </button>
+          )}
 
-    {(isEnrolled || role === "Instructor") && lesson.video_url && (
-      <VideoPlayer videoUrl={lesson.video_url} />
-    )}
-
-    {(isEnrolled || role === "Instructor") && lesson.assignment_url && (
-      <AssignmentPreview assignmentUrl={lesson.assignment_url} />
-    )}
-  </li>
-);
-
-// Subcomponent: Video Player
-const VideoPlayer = ({ videoUrl }) => (
-  <video controls width="600">
-    <source src={videoUrl} type="video/mp4" />
-    Your browser does not support the video tag.
-  </video>
-);
-
-// Subcomponent: Assignment Preview
-const AssignmentPreview = ({ assignmentUrl }) => (
-  <div>
-    <h4>Assignment Preview:</h4>
-    <iframe
-      src={`https://docs.google.com/gview?url=${encodeURIComponent(assignmentUrl)}&embedded=true`}
-      width="100%"
-      height="300px"
-      frameBorder="0"
-      title="PDF Preview"
-    />
-    <div style={{ marginTop: "10px" }}>
-      <a 
-        href={assignmentUrl.replace("/upload/", "/upload/fl_attachment/")} 
-        target="_blank" 
-        rel="noopener noreferrer"
-      >
-        📥 Download Assignment PDF
-      </a>
-    </div>
-  </div>
-);
-
-// Subcomponent: Review List
-const ReviewList = ({ reviews }) => (
-  <div className="course-reviews">
-    <hr />
-    <h2>Student Reviews</h2>
-    {reviews.length > 0 ? (
-      reviews.map((review) => (
-        <div key={review.id} className="review">
-          <p className="review-author">
-            <strong>{review.studentname || "Anonymous"}</strong>
-          </p>
-          <p className="review-content">"{review.review_text}"</p>
-          <p className="review-rating">
-            <strong>Rating:</strong> {review.rating} / 5
-          </p>
-          <small className="review-date">
-            Reviewed on: {new Date(review.created_at).toLocaleDateString()}
-          </small>
         </div>
-      ))
-    ) : (
-      <p>No reviews available.</p>
-    )}
-  </div>
-);
+      </div>
 
-// Subcomponent: Review Form
-const ReviewForm = ({ onSubmit, reviewInput, setReviewInput }) => (
+      {/* Description Section */}
+      <div className="course-description">
+        <h2>Course Description</h2>
+        <p>{course.description}</p>
+      </div>
+
+      <div class="certificate-container">
+           <div class="certificate-text">
+             <h2>Earn a career certificate</h2>
+             <p>Add this credential to your LinkedIn profile, resume, or CV</p>
+             <p>Share it on social media and in your performance review</p>
+           </div>
+           <div class="certificate-image">
+             <img src="/images/certificate.png" alt="Certificate illustration" />
+           </div>
+         </div>
+
+      {/* Curriculum Section */}
+      <div className="course-curriculum">
+        <h2>Curriculum </h2>
+        {course.modules?.length > 0 ? (
+          course.modules.map((module) => (
+            <div key={module.id} className="module">
+              <h3 className="module-title">
+              
+                {role === "Student" && isEnrolled && (
+                  <input
+                    type="checkbox"
+                    checked={isModuleCompleted(module)}
+                    readOnly
+                  />
+                )}
+                {module.title}
+              </h3>
+              <ul>
+                {module.lessons.map((lesson, index) => (
+                  <li key={index} className="course-lesson">
+                    <label>
+                      {role === "Student" && isEnrolled && (
+                        <input
+                          type="checkbox"
+                          checked={completedLessons[module.id]?.includes(index)}
+                          onChange={() => toggleLessonCompletion(module.id, index)}
+                        />
+                      )}
+                      {lesson.title}
+                      {/* {lesson.assignment_url} */}
+                      {isEnrolled}
+                      {/* {role} */}
+                      
+                      
+                      
+                    </label>
+
+                    {/* Video Section - Visible only to enrolled Students and Instructors */}
+                    {(isEnrolled || role === "Instructor") && lesson.video_url && (
+                      <video controls width="600">
+                        <source src={lesson.video_url} type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
+                    )}
+
+      {(isEnrolled || role === "Instructor") && lesson.assignment_url && (
+        <div>
+          <h4>Assignment Preview:</h4>
+          
+          {/* PDF Preview using Google Docs Viewer */}
+          <iframe
+            src={`https://docs.google.com/gview?url=${encodeURIComponent(lesson.assignment_url)}&embedded=true`}
+            width="100%"
+            height="300px"
+            frameBorder="0"
+            title="PDF Preview"
+          ></iframe>
+
+          
+      <div style={{ marginTop: "10px" }}>
+            {(() => {
+              const downloadUrl = lesson.assignment_url.includes("/upload/")
+                ? lesson.assignment_url.replace("/upload/", "/upload/fl_attachment/")
+                : lesson.assignment_url;
+              return (
+                <a href={downloadUrl} target="_blank" rel="noopener noreferrer">
+                  📥 Download Assignment PDF
+                </a>
+              );
+            })()}
+          </div>
+        </div>
+      )}
+
+
+              {/* Instructor Upload Section */}
+              {/* {role === "Instructor" && (
+                <div className="video-upload">
+                  <input
+                    type="file"
+                    accept="video/*"
+                    onChange={(e) => setVideoFile(e.target.files[0])}
+                  />
+                  <button onClick={(e) => handleVideoUpload(e, module.id)}>
+                    Upload Video
+                  </button>
+                </div>
+              )} */}
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))
+  ) : (
+    <p>No modules available</p>
+  )}
+</div>
+
+
+
+      {/* Reviews Section */}
+      <div className="course-reviews">
+        <hr />
+        <h2>Student Reviews</h2>
+        {reviews.length > 0 ? (
+          reviews.map((review) => (
+            <div key={review.id} className="review">
+              <p className="review-author">
+                <strong>{review.studentname || "Anonymous"}</strong>
+              </p>
+              <p className="review-content">"{review.review_text}"</p>
+              <p className="review-rating">
+                <strong>Rating:</strong> {review.rating} / 5
+              </p>
+              <small className="review-date">
+                Reviewed on: {new Date(review.created_at).toLocaleDateString()}
+              </small>
+            </div>
+          ))
+        ) : (
+          <p>No reviews available.</p>
+        )}
+      </div>
+
+      {/* Review Submission Section */}
+      {/* Review Submission Section */}
+{isEnrolled && role === "Student" && (
   <div className="submit-review">
     <h3>Leave a Review</h3>
-    <form onSubmit={onSubmit}>
+    <form onSubmit={handleReviewSubmit}>
       <label style={{ display: "block", marginBottom: "10px" }}>
         Rating:
         <input
@@ -201,214 +453,31 @@ const ReviewForm = ({ onSubmit, reviewInput, setReviewInput }) => (
       </button>
     </form>
   </div>
-);
+)}
 
-// Subcomponent: Certificate Button
-const CertificateButton = ({ isCourseCompleted, onClick }) => (
-  <div className="certificate-button">
-    {isCourseCompleted && (
-      <button
-        onClick={onClick}
-        style={{
-          backgroundColor: "green",
-          color: "white",
-          border: "none",
-          padding: "10px 20px",
-          fontSize: "16px",
-          borderRadius: "4px",
-          cursor: "pointer",
-        }}
-      >
-        Generate Certificate
-      </button>
-    )}
-  </div>
-);
-
-// Main Component
-const CourseDetails = () => {
-  const { courseId } = useParams();
-  const navigate = useNavigate();
-  const [course, setCourse] = useState(null);
-  const [reviews, setReviews] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [completedLessons, setCompletedLessons] = useState({});
-  const [reviewInput, setReviewInput] = useState({ rating: "", text: "" });
-  const [isEnrolled, setIsEnrolled] = useState(false);
-  const role = localStorage.getItem("role");
-
-  // API Client
-  const api = axios.create({
-    baseURL: "http://localhost:5000/api",
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`
-    }
-  });
-
-  // Fetch course data
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [courseRes, reviewsRes] = await Promise.all([
-          api.get(`/instructor/courses/${courseId}/details`),
-          api.get(`/courses/${courseId}/reviews`)
-        ]);
-        setCourse(courseRes.data);
-        setReviews(reviewsRes.data);
-      } catch (err) {
-        setError(err.response?.data?.message || "Failed to load course data");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [courseId]);
-
-  // Check enrollment status
-  useEffect(() => {
-    const checkEnrollment = async () => {
-      try {
-        const { data } = await api.get(`/courses/${courseId}/enrollment-status`);
-        setIsEnrolled(data.enrolled);
-      } catch (err) {
-        console.error("Error checking enrollment:", err);
-      }
-    };
-
-    if (role === "Student") checkEnrollment();
-  }, [courseId, role]);
-
-  // Add to cart handler
-  const handleAddCourse = async () => {
-    try {
-      await api.post("/cart/add", { courseId });
-      alert("Course added to cart successfully");
-    } catch (err) {
-      alert(err.response?.data?.message || "Failed to add course to cart");
-    }
-  };
-
-  // Toggle lesson completion
-  const toggleLessonCompletion = (moduleId, lessonIndex) => {
-    setCompletedLessons(prev => ({
-      ...prev,
-      [moduleId]: prev[moduleId]?.includes(lessonIndex)
-        ? prev[moduleId].filter(i => i !== lessonIndex)
-        : [...(prev[moduleId] || []), lessonIndex]
-    }));
-  };
-
-  // Submit review
-  const handleReviewSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await api.post(`/courses/${courseId}/reviews`, {
-        rating: reviewInput.rating,
-        reviewText: reviewInput.text
-      });
-      alert("Review submitted successfully");
-      setReviewInput({ rating: "", text: "" });
-      // Refresh reviews
-      const { data } = await api.get(`/courses/${courseId}/reviews`);
-      setReviews(data);
-    } catch (err) {
-      alert(err.response?.data?.message || "Failed to submit review");
-    }
-  };
-
-  // Check course completion
-  const isCourseCompleted = () => {
-    return course?.modules?.every(module => 
-      completedLessons[module.id]?.length === module.lessons.length
-    );
-  };
-
-  // Generate certificate
-  const handleGenerateCertificate = () => {
-    if (!isCourseCompleted()) {
-      alert("Complete all modules to generate a certificate");
-      return;
-    }
-
-    navigate(`/certificate`, {
-      state: {
-        studentData: {
-          name: localStorage.getItem("username") || "Student Name",
-          courseName: course?.title || "Course Title",
-          completionDate: new Date().toLocaleDateString(),
-        },
-      },
-    });
-  };
-
-  if (loading) return <div className="loading">Loading...</div>;
-  if (error) return <div className="error">{error}</div>;
-  if (!course) return <div>No course details found.</div>;
-
-  return (
-    <div>
-      <Menu />
-      <div className="course-detail">
-        <CourseHeader 
-          course={course} 
-          role={role} 
-          isEnrolled={isEnrolled} 
-          onAddToCart={handleAddCourse} 
-        />
-
-
-        <div className="course-description">
-          <h2>Course Description</h2>
-          <p>{course.description}</p>
-        </div>
-
-        <div class="certificate-container">
-          <div class="certificate-text">
-            <h2>Earn a career certificate</h2>
-            <p>Add this credential to your LinkedIn profile, resume, or CV</p>
-            <p>Share it on social media and in your performance review</p>
-          </div>
-          <div class="certificate-image">
-            <img src="/images/certificate.png" alt="Certificate illustration" />
-          </div>
-        </div>
-
-        <div className="course-curriculum">
-          <h2>Curriculum</h2>
-          {course.modules?.length > 0 ? (
-            course.modules.map(module => (
-              <ModuleItem
-                key={module.id}
-                module={module}
-                role={role}
-                isEnrolled={isEnrolled}
-                onToggleLesson={toggleLessonCompletion}
-              />
-            ))
-          ) : (
-            <p>No modules available</p>
-          )}
-        </div>
-
-        <ReviewList reviews={reviews} />
-
-        {isEnrolled && role === "Student" && (
-          <ReviewForm
-            onSubmit={handleReviewSubmit}
-            reviewInput={reviewInput}
-            setReviewInput={setReviewInput}
-          />
+      {/* Completion Certificate Section */}
+      <div className="certificate-button">
+        {isCourseCompleted() && (
+          <button
+            onClick={handleGenerateCertificate}
+            style={{
+              backgroundColor: "green",
+              color: "white",
+              border: "none",
+              padding: "10px 20px",
+              fontSize: "16px",
+              borderRadius: "4px",
+              cursor: "pointer",
+            }}
+          >
+            Generate Certificate
+          </button>
         )}
-
-        <CertificateButton
-          isCourseCompleted={isCourseCompleted()}
-          onClick={handleGenerateCertificate}
-        />
       </div>
-      <Footer />
     </div>
+    <footer><Footer /></footer>
+      </div>
+
   );
 };
 

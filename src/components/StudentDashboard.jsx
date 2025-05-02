@@ -70,9 +70,9 @@ function StudentDashboard() {
       <div className="studentDashboard">
         {/* Welcome Section */}
         <div className="dashboardWelcome">
-        <h1 className="slide-in-left text-4xl font-bold text-gray-800">
-          WELCOME !
-        </h1>
+          <h1 className="slide-in-left text-4xl font-bold text-gray-800">
+            WELCOME !
+          </h1>
           <h2 className="slide-in-left text-4xl font-bold text-gray-800"> {studentName}</h2>
           <p className="slide-in-left-delay text-2xl text-gray-600 mt-2">
             Ready to continue learning? Here's your personalized dashboard.
@@ -80,10 +80,8 @@ function StudentDashboard() {
         </div>
 
         {/* Summary Section */}
-        <div className="headings">
-          <h1>Overview</h1>
-        </div>
         <div className="dashboardSummary">
+          <h1>Overview</h1>
           <div className="summaryCards">
             <div className="summaryCard">
               <h2>Total Enrolled Courses</h2>
@@ -104,17 +102,17 @@ function StudentDashboard() {
           </div>
         </div>
 
-        {/* Courses Sliders */}
-        <div className="dashboardSliders">
-          <div className="sliderSection">
+        <div className="sliderSection">
             <StudentSlider />
           </div>
+        {/* Courses Sliders */}
+        {/* <div className="dashboardSliders"> */}
+          
           <div className="sliderSection">
             <h1 className="headings">What to Learn Next</h1>
-            <h3 className="headings">Recommended for you</h3>
             <Slider role="Student" />
           </div>
-        </div>
+        {/* </div> */}
 
         {/* Feedback Section */}
         <div className="feedbackSection">

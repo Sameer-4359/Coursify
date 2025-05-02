@@ -17,8 +17,8 @@ function Home(){
             <main>
             <Banner />
             <Heading />
-            <Slider />
             <Experience />
+            <Slider />
             <ChooseUs />
             <Community />
             </main>

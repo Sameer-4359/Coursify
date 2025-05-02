@@ -113,6 +113,7 @@ function App() {
           <Route path="/certificate" element={<Certificate />} />
           <Route path="/aboutus" element={<AboutUs />} />
           <Route path="/oauth-success" element={<OAuthSuccess />} />
+          {/* <Route path="/courses" element={<CoursesPage />} /> */}
         </Routes>
       </div>
     </Router>
