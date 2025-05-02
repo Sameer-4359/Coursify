@@ -23,15 +23,56 @@ body {
 }
 
 .navbarBrand {
-    font-family: 'Montserrat', sans-serif;
-    /* color: #ffffff !important; */
-    color: black;
-    font-size: 30px !important;
-    font-weight: bold;
-    text-decoration: none;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-  }
+  font-family: 'Poppins', sans-serif !important;
+  color: #111827 !important; /* Modern dark gray instead of pure black */
+  font-size: 30px !important;
+  font-weight: 800; /* Extra bold for better impact */
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 3px; /* Slightly more spacing for elegance */
+  position: relative;
+  display: inline-block;
+  padding: 0 5px;
+  
+  /* Gradient text for modern look (optional) */
+  background: linear-gradient(90deg, #111827 0%, #4b5563 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  
+  /* Subtle animation */
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+}
+
+.navbarBrand:hover {
+  transform: translateY(-2px);
+  text-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.navbarBrand::after {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 5%;
+  width: 90%;
+  height: 2px;
+  background: linear-gradient(90deg, #3b82f6 0%, #ec4899 100%);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.4s ease;
+}
+
+.navbarBrand:hover::after {
+  transform: scaleX(1);
+}
+
+/* For dark mode compatibility */
+.dark .navbarBrand {
+  color: #f3f4f6 !important;
+  background: linear-gradient(90deg, #f3f4f6 0%, #d1d5db 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
 
   /* Remove list style for nav items */
 .navbar-nav {
