@@ -127,3 +127,42 @@
       padding: 1rem;
     }
   } 
+
+  .file-upload-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  margin-top: 0.5rem;
+}
+
+.upload-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.upload-label {
+  margin-bottom: 0.25rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.video-upload,
+.assignment-upload {
+  padding: 0.5rem;
+  font-size: 0.95rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background-color: #ffffff;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+
+.video-upload:hover,
+.assignment-upload:hover {
+  border-color: #6366f1;
+}
