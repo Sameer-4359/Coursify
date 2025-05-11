@@ -5,6 +5,8 @@ import Menu from "./Menu";
 import "../componentscss/coursedetails.css";
 
 
+
+
 const CourseDetails = () => {
   const { courseId } = useParams();
   const navigate = useNavigate(); // Define navigate here
@@ -16,6 +18,8 @@ const CourseDetails = () => {
   const [reviewInput, setReviewInput] = useState({ rating: "", text: "" });
   const [isEnrolled, setIsEnrolled] = useState(false);
   const [userRole, setUserRole] = useState(""); // Get role from auth context
+  const [notes, setNotes] = useState({});
+  const [editingLessonId, setEditingLessonId] = useState(null);
 
   
   const role = localStorage.getItem("role"); // Fetch the role from localStorage or API
@@ -76,27 +80,57 @@ const CourseDetails = () => {
   //check if student is enrolled in a course
    
   useEffect(() => {
-    async function checkEnrollment() {
-      try {
-        const response = await fetch(`http://localhost:5000/api/courses/${courseId}/enrollment-status`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`, // Include token if needed
-          },
-        });
+  async function checkEnrollment() {
+    try {
+      const response = await fetch(`http://localhost:5000/api/courses/${courseId}/enrollment-status`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
 
-        const data = await response.json();
-        if (data.enrolled) {
-          setIsEnrolled(true);
-        }
-      } catch (error) {
-        console.error("Error checking enrollment status:", error);
+      const data = await response.json();
+      if (data.enrolled) {
+        setIsEnrolled(true);
+      } else {
+        setIsEnrolled(false); // <--- important to explicitly unset it if not enrolled
       }
+    } catch (error) {
+      console.error("Error checking enrollment status:", error);
     }
+  }
 
-    checkEnrollment();
-  }, [courseId]);
+  checkEnrollment();
+}, [courseId]);
+
+
+const fetchNote = async (lessonId) => {
+  const token = localStorage.getItem("token");
+  try {
+    const res = await axios.get(`http://localhost:5000/api/notes/${lessonId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    setNotes((prev) => ({ ...prev, [lessonId]: res.data.note }));
+  } catch (err) {
+    console.error("Error fetching note:", err);
+  }
+};
+
+const saveNote = async (lessonId) => {
+  const token = localStorage.getItem("token");
+  try {
+    const res = await axios.post(`http://localhost:5000/api/notes/${lessonId}`, 
+      { note: notes[lessonId] },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    alert("Note saved!");
+    setEditingLessonId(null);
+  } catch (err) {
+    console.error("Error saving note:", err);
+    alert("Failed to save note.");
+  }
+};
 
 
 
@@ -180,6 +214,18 @@ const CourseDetails = () => {
     //alert(studentData.name);
   };
 
+  useEffect(() => {
+  if (isEnrolled && course?.modules) {
+    course.modules.forEach((module, moduleIndex) => {
+      module.lessons.forEach((lesson, lessonIndex) => {
+        fetchNote(lesson.id);
+      });
+    });
+  }
+}, [isEnrolled, course]);
+
+
+
   const handleVideoUpload = async (e, moduleId) => {
     e.preventDefault();
     if (!videoFile) {
@@ -226,141 +272,154 @@ const CourseDetails = () => {
      <Menu />
 
     <div className="course-detail">
-      {/* Header Section */}
-      <div className="course-header">
-        <img
-          src={course.image_url}
-          alt={course.title}
-          className="course-image"
-        />
-        <div className="course-info">
-          <h1 className="course-title">{course.title}</h1>
-          <p className="course-instructor">Instructor: {course.instructor}</p>
-          <p className="course-price">Price: ${course.price}</p>
-          {/* Add to Cart Button with onClick handler */}
-          {!isEnrolled && role === "Student" && (
-            <button className="add-to-cart-button" onClick={() => handleAddCourse(courseId)}>
-              Add to Cart
-            </button>
-          )}
-
-        </div>
-      </div>
-
-      {/* Description Section */}
-      <div className="course-description">
-        <h2>Course Description</h2>
-        <p>{course.description}</p>
-      </div>
-
-      <div class="certificate-container">
-           <div class="certificate-text">
-             <h2>Earn a career certificate</h2>
-             <p>Add this credential to your LinkedIn profile, resume, or CV</p>
-             <p>Share it on social media and in your performance review</p>
-           </div>
-           <div class="certificate-image">
-             <img src="/images/certificate.png" alt="Certificate illustration" />
-           </div>
-         </div>
-
-      {/* Curriculum Section */}
-      <div className="course-curriculum">
-        <h2>Curriculum </h2>
-        {course.modules?.length > 0 ? (
-          course.modules.map((module) => (
-            <div key={module.id} className="module">
-              <h3 className="module-title">
-              
-                {role === "Student" && isEnrolled && (
-                  <input
-                    type="checkbox"
-                    checked={isModuleCompleted(module)}
-                    readOnly
-                  />
-                )}
-                {module.title}
-              </h3>
-              <ul>
-                {module.lessons.map((lesson, index) => (
-                  <li key={index} className="course-lesson">
-                    <label>
-                      {role === "Student" && isEnrolled && (
-                        <input
-                          type="checkbox"
-                          checked={completedLessons[module.id]?.includes(index)}
-                          onChange={() => toggleLessonCompletion(module.id, index)}
-                        />
-                      )}
-                      {lesson.title}
-                      {/* {lesson.assignment_url} */}
-                      {isEnrolled}
-                      {/* {role} */}
-                      
-                      
-                      
-                    </label>
-
-                    {/* Video Section - Visible only to enrolled Students and Instructors */}
-                    {(isEnrolled || role === "Instructor") && lesson.video_url && (
-                      <video controls width="600">
-                        <source src={lesson.video_url} type="video/mp4" />
-                        Your browser does not support the video tag.
-                      </video>
-                    )}
-
-      {(isEnrolled || role === "Instructor") && lesson.assignment_url && (
-        <div>
-          <h4>Assignment Preview:</h4>
-          
-          {/* PDF Preview using Google Docs Viewer */}
-          <iframe
-            src={`https://docs.google.com/gview?url=${encodeURIComponent(lesson.assignment_url)}&embedded=true`}
-            width="100%"
-            height="300px"
-            frameBorder="0"
-            title="PDF Preview"
-          ></iframe>
-
-          
-      <div style={{ marginTop: "10px" }}>
-            {(() => {
-              const downloadUrl = lesson.assignment_url.includes("/upload/")
-                ? lesson.assignment_url.replace("/upload/", "/upload/fl_attachment/")
-                : lesson.assignment_url;
-              return (
-                <a href={downloadUrl} target="_blank" rel="noopener noreferrer">
-                  📥 Download Assignment PDF
-                </a>
-              );
-            })()}
-          </div>
-        </div>
+  {/* Header Section */}
+  <div className="course-header">
+    <img
+      src={course.image_url}
+      alt={course.title}
+      className="course-image"
+    />
+    <div className="course-info">
+      <h1 className="course-title">{course.title}</h1>
+      <p className="course-instructor">Instructor: {course.instructor}</p>
+      <p className="course-price">Price: ${course.price}</p>
+      {!isEnrolled && role === "Student" && (
+        <button className="add-to-cart-button" onClick={() => handleAddCourse(courseId)}>
+          Add to Cart
+        </button>
       )}
+    </div>
+  </div>
 
+  {/* Description Section */}
+  <div className="course-description">
+    <h2>Course Description</h2>
+    <p>{course.description}</p>
+  </div>
 
-              {/* Instructor Upload Section */}
-              {/* {role === "Instructor" && (
-                <div className="video-upload">
-                  <input
-                    type="file"
-                    accept="video/*"
-                    onChange={(e) => setVideoFile(e.target.files[0])}
-                  />
-                  <button onClick={(e) => handleVideoUpload(e, module.id)}>
-                    Upload Video
-                  </button>
-                </div>
-              )} */}
-            </li>
-          ))}
-        </ul>
-      </div>
-    ))
-  ) : (
-    <p>No modules available</p>
-  )}
-</div>
+  <div class="certificate-container">
+    <div class="certificate-text">
+      <h2>Earn a career certificate</h2>
+      <p>Add this credential to your LinkedIn profile, resume, or CV</p>
+      <p>Share it on social media and in your performance review</p>
+    </div>
+    <div class="certificate-image">
+      <img src="/images/certificate.png" alt="Certificate illustration" />
+    </div>
+  </div>
+
+  {/* Curriculum Section */}
+  <div className="course-curriculum">
+    <h2>Curriculum </h2>
+    {course.modules?.length > 0 ? (
+      course.modules.map((module) => (
+        <div key={module.id} className="module">
+          <h3 className="module-title">
+            {role === "Student" && isEnrolled && (
+              <input
+                type="checkbox"
+                checked={isModuleCompleted(module)}
+                readOnly
+              />
+            )}
+            {module.title}
+          </h3>
+          <ul>
+            {module.lessons.map((lesson, index) => (
+              <li key={index} className="course-lesson">
+                <label>
+                  {role === "Student" && isEnrolled && (
+                    <input
+                      type="checkbox"
+                      checked={completedLessons[module.id]?.includes(index)}
+                      onChange={() => toggleLessonCompletion(module.id, index)}
+                    />
+                  )}
+                  {lesson.title}
+                  {isEnrolled}
+                </label>
+
+                {/* Video Section */}
+                {(isEnrolled || role === "Instructor") && lesson.video_url && (
+                  <video controls width="600">
+                    <source src={lesson.video_url} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                )}
+
+                {/* Assignment PDF Section */}
+                {(isEnrolled || role === "Instructor") && lesson.assignment_url && (
+                  <div>
+                    <h4>Assignment Preview:</h4>
+                    <iframe
+                      src={`https://docs.google.com/gview?url=${encodeURIComponent(lesson.assignment_url)}&embedded=true`}
+                      width="100%"
+                      height="300px"
+                      frameBorder="0"
+                      title="PDF Preview"
+                    ></iframe>
+                    <div style={{ marginTop: "10px" }}>
+                      {(() => {
+                        const downloadUrl = lesson.assignment_url.includes("/upload/")
+                          ? lesson.assignment_url.replace("/upload/", "/upload/fl_attachment/")
+                          : lesson.assignment_url;
+                        return (
+                          <a href={downloadUrl} target="_blank" rel="noopener noreferrer">
+                            📥 Download Assignment PDF
+                          </a>
+                        );
+                      })()}
+                    </div>
+                  </div>
+                )}
+
+                {/* ✅ Notes Section */}
+                {(isEnrolled && role === "Student") && (
+                  <div className="lesson-notes" style={{ marginTop: "1rem" }}>
+                    <h4>📝 Notes:</h4>
+                    {editingLessonId === lesson.id ? (
+                      <>
+                        <textarea
+                          rows="4"
+                          value={notes[lesson.id] || ""}
+                          onChange={(e) =>
+                            setNotes({ ...notes, [lesson.id]: e.target.value })
+                          }
+                          style={{ width: "100%" }}
+                        />
+                        <div style={{ marginTop: "0.5rem" }}>
+                         <button onClick={() => saveNote(lesson.id)}>Save</button>
+
+                          <button
+                            style={{ marginLeft: "0.5rem" }}
+                            onClick={() => {
+                              setNotes({ ...notes, [lesson.id]: "" });
+                              setEditingLessonId(null);
+                            }}
+                          >
+                            Clear
+                          </button>
+                        </div>
+                      </>
+                    ) : (
+                      <div>
+                        <p style={{ whiteSpace: "pre-wrap" }}>{notes[lesson.id]}</p>
+                        <button onClick={() => setEditingLessonId(lesson.id)}>
+                          {notes[lesson.id] ? "Edit Notes" : "Add Notes"}
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))
+    ) : ( 
+      <p>No modules available.</p>
+    )}
+  </div>
 
 
 

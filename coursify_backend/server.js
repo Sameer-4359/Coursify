@@ -14,6 +14,7 @@ const path = require("path");
 const uploadRoutes = require("./routes/uploadRoutes");
 const googleOAuthRoutes = require("./routes/googleOAuthDirect");
 const feedbackRoutes = require('./routes/feedbackRoutes');
+const notesRoutes = require('./routes/notesRoutes');
 
 
 require("dotenv").config();
@@ -50,6 +51,7 @@ app.use("/api/upload", uploadRoutes);
 app.use("/api", require("./routes/lessonRoutes"));
 app.use("/api/google-direct", googleOAuthRoutes);
 app.use('/api/website', feedbackRoutes);
+app.use('/api/notes', notesRoutes);
 
 
 
@@ -89,6 +91,9 @@ app.use("/certificates", express.static(path.join(__dirname, "public", "certific
 app.get("/", (req, res) => {
   res.send("Server is running! Try hitting the API endpoints.");
 });
+
+
+
 
 
 
