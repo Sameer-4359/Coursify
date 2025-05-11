@@ -17,6 +17,7 @@ import Certificate from './components/Certificate.jsx';
 import AboutUs from './components/AboutUs.jsx'
 import OAuthSuccess from './components/OAuthSucess.jsx'
 import CoursesPage from './components/CoursesPage.jsx'
+import AdminDashboard from './components/AdminDashboard.jsx'
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
           <Route path="/aboutus" element={<AboutUs />} />
           <Route path="/oauth-success" element={<OAuthSuccess />} />
           <Route path="/courses" element={<CoursesPage />} />
+          <Route path="/admindashboard" element={<AdminDashboard />} />
         </Routes>
       </div>
     </Router>

@@ -67,24 +67,9 @@ function Menu() {
             <CourseSearchBar />
           </div>
           <Nav className="ms-auto">
-          <Nav.Link
-  className="nav-link"
-  onClick={() => {
-    const token = localStorage.getItem("token");
-    const role = localStorage.getItem("role");
-
-    if (token && role === "Student") {
-      navigate("/studentdashboard");
-    } else if (token && role === "Instructor") {
-      navigate("/instructordashboard");
-    } else {
-      navigate("/home");
-    }
-  }}
->
-  Home
-</Nav.Link>
-
+            <Nav.Link href="/Home" className="nav-link">
+              Home
+            </Nav.Link>
             <Nav.Link href="/Courses" className="nav-link">
               Courses
             </Nav.Link>
@@ -105,7 +90,24 @@ function Menu() {
               </>
             ) : (
               <>
-                <span className="nav-link">Hi, {user?.username}</span>
+                <Nav.Link
+                  className="nav-link"
+                  onClick={() => {
+                    const token = localStorage.getItem("token");
+                    const role = localStorage.getItem("role");
+
+                    if (token && role === "Student") {
+                      navigate("/studentdashboard");
+                    } else if (token && role === "Instructor") {
+                      navigate("/instructordashboard");
+                    } else if (token && role === "Admin") {
+                      navigate("/admindashboard");
+                    }
+                  }}
+                >
+                  Hi, {user?.username}
+                </Nav.Link>
+
                 <Button onClick={handleLogout} className="authButton">
                   Logout
                 </Button>
@@ -113,7 +115,7 @@ function Menu() {
                   <Button onClick={handleViewCart} className="authButton">
                     <FontAwesomeIcon icon={faShoppingCart} /> View Cart
                   </Button>
-                )}
+          )}
               </>
             )}
           </Nav>
