@@ -343,6 +343,58 @@ exports.updateCourse = async (req, res) => {
 };
 
 // Fetch course details with lessons and video URLs
+// exports.getCourseDetails = async (req, res) => {
+//   const { courseId } = req.params;
+
+//   try {
+//     const result = await db.query(
+//       `
+//       SELECT 
+//         c.title, 
+//         c.price, 
+//         c.description, 
+//         c.image_url, 
+//         i.username AS instructorName,
+//         COALESCE(
+//           json_agg(
+//             json_build_object(
+//               'id', m.id,
+//               'title', m.title,
+//               'lessons', (
+//                 SELECT COALESCE(json_agg(
+//                   json_build_object(
+//                     'id', l.id, 
+//                     'title', l.title, 
+//                     'video_url', l.video_url,
+//                     'assignment_url', l.assignment_url
+//                   )
+//                 ), '[]'::json)
+//                 FROM lessons l 
+//                 WHERE l.module_id = m.id
+//               )
+//             )
+//           ) FILTER (WHERE m.id IS NOT NULL), '[]'::json
+//         ) AS modules
+//       FROM courses c
+//       JOIN instructors i ON c.instructor_id = i.id
+//       LEFT JOIN modules m ON m.course_id = c.id
+//       WHERE c.id = $1
+//       GROUP BY c.id, i.username
+//       `,
+//       [courseId]
+//     );
+
+//     if (result.rowCount === 0) {
+//       return res.status(404).json({ error: "Course not found" });
+//     }
+
+//     res.status(200).json(result.rows[0]);
+//   } catch (error) {
+//     console.error("Error fetching course details:", error);
+//     res.status(500).json({ error: "Failed to fetch course details" });
+//   }
+// };
+
 exports.getCourseDetails = async (req, res) => {
   const { courseId } = req.params;
 
@@ -350,27 +402,38 @@ exports.getCourseDetails = async (req, res) => {
     const result = await db.query(
       `
       SELECT 
+        c.id,
         c.title, 
         c.price, 
         c.description, 
         c.image_url, 
-        i.username AS instructorName,
-        json_agg(
-          json_build_object(
-            'id', m.id,
-            'title', m.title,
-            'lessons', (
-              SELECT json_agg(json_build_object('id', l.id, 'title', l.title, 'video_url', l.video_url,'assignment_url',l.assignment_url)) 
-              FROM lessons l 
-              WHERE l.module_id = m.id
+        i.id AS instructor_id,
+        i.username AS instructor_name,
+        COALESCE(
+          json_agg(
+            json_build_object(
+              'id', m.id,
+              'title', m.title,
+              'lessons', (
+                SELECT COALESCE(json_agg(
+                  json_build_object(
+                    'id', l.id, 
+                    'title', l.title, 
+                    'video_url', l.video_url,
+                    'assignment_url', l.assignment_url
+                  )
+                ), '[]'::json)
+                FROM lessons l 
+                WHERE l.module_id = m.id
+              )
             )
-          )
+          ) FILTER (WHERE m.id IS NOT NULL), '[]'::json
         ) AS modules
       FROM courses c
       JOIN instructors i ON c.instructor_id = i.id
       LEFT JOIN modules m ON m.course_id = c.id
       WHERE c.id = $1
-      GROUP BY c.id, i.username
+      GROUP BY c.id, i.id
       `,
       [courseId]
     );
@@ -385,6 +448,7 @@ exports.getCourseDetails = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch course details" });
   }
 };
+
 
 // Update a specific lesson
 exports.updateLesson = async (req, res) => {
