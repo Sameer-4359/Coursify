@@ -12,6 +12,7 @@
   color: white;
   padding: 1rem;
   transition: width 0.3s ease;
+  position: fixed;
 }
 
 .sidebar.collapsed {

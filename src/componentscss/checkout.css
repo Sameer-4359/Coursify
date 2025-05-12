@@ -1,156 +1,76 @@
-/* General Styling for Checkout Page */
-/* .checkout-page {
-    font-family: "Roboto", sans-serif;
-    color: #333;
+/* General Page Layout */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #ffffff;
+  color: #111111;
+}
 
-    padding: 40px 20px;
-  } */
-  
-  /* .checkout-page h1 {
-    text-align: center;
-    font-size: 2.5rem;
-    color: #007991;
-    font-weight: 600;
-    margin-bottom: 20px;
-  } */
-  .headerSection {
-    background: linear-gradient(135deg, #007991, #75d9ec);
-    color: whitesmoke;
-    text-align: left;
-    margin-bottom: 20px;
-    padding: 100px;
-    border-bottom-right-radius: 20%;
-    border-bottom-left-radius: 20%;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Container for the sections */
+.checkout-page {
+  padding: 40px 20px;
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.checkout-page h1 {
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+  font-weight: 600;
+  color: #111;
+}
+
+/* Container for summary and button */
+.checkout-container {
+  background-color: #f9f9f9;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.checkout-container:hover {
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+}
+
+/* Enroll Button Styling */
+.enroll-button {
+  margin-top: 25px;
+  padding: 12px 30px;
+  font-size: 1rem;
+  background-color: #6a1b9a;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.enroll-button:hover {
+  background-color: #4a148c;
+}
+
+/* Enrollment Message */
+.enroll-message {
+  margin-top: 15px;
+  font-size: 1rem;
+  color: #28a745; /* Green for success message */
+}
+
+/* Footer and Header Styling */
+header, footer {
+  background-color: #ffffff;
+  padding: 15px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
   .checkout-container {
-    display: flex;
-    flex-wrap: wrap; /* Ensures responsiveness */
-    justify-content: space-between;
-    gap: 20px;
-    margin: 30px;
-  }
-  
-  /* Order Summary Section */
-  .order-summary {
-    flex: 1 1 40%; /* Adjusts width for responsiveness */
-    background: white;
     padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border: 1px solid #ddd;
   }
-  
-  .order-summary h2 {
-    font-size: 1.8rem;
-    color: #333;
-    margin-bottom: 15px;
-  }
-  
-  .order-summary ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .order-summary ul li {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 0;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .order-summary ul li:last-child {
-    border-bottom: none;
-  }
-  
-  .order-summary .total-price {
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #ff9635;
-    margin-top: 15px;
-  }
-  
-  /* Billing Details Section */
-  /* .billing-details {
-    flex: 1 1 40%; 
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border: 1px solid #ddd;
-  }
-  
-  .billing-details h2 {
-    font-size: 1.8rem;
-    color: #333;
-    margin-bottom: 15px;
-  }
-  
-  .billing-details form input,
-  .billing-details form textarea {
+
+  .enroll-button {
     width: 100%;
-    padding: 10px 15px;
-    margin-bottom: 15px;
-    font-size: 1rem;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    outline: none;
   }
-  
-  .billing-details form input:focus,
-  .billing-details form textarea:focus {
-    border-color: #ff9635;
-  } */
-  
-  /* Payment Section */
-  .payment-section {
-    flex: 1 1 40%; /* Adjusts width for responsiveness */
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border: 1px solid #ddd;
-  }
-  
-  .payment-section h2 {
-    font-size: 1.8rem;
-    color: #333;
-    margin-bottom: 15px;
-  }
-  
-  .payment-section button {
-    width: 100%;
-    padding: 15px;
-    font-size: 1rem;
-    background-color: #ff9635;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .payment-section button:hover {
-    background-color: #e85a13;
-  }
-  
-  /* Responsive Design */
-  @media (max-width: 768px) {
-    .checkout-container {
-      flex-direction: column; /* Stack sections vertically */
-      gap: 30px;
-    }
-  
-    .order-summary,
-    .billing-details,
-    .payment-section {
-      flex: 1 1 100%;
-    }
-  
-    .checkout-page h1 {
-      font-size: 2rem;
-    }
-  }
-  
+}
