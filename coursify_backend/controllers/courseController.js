@@ -118,12 +118,53 @@ const getCourseReviews = async (req, res) => {
   }
 };
 
+const getInstructorReviews= async (req, res) => {
+  const { courseIds } = req.query;
+  try {
+    const result = await pool.query(
+      `SELECT r.id, r.review_text, r.rating, r.created_at, s.username AS student_name, c.title AS course_title
+       FROM reviews r
+       JOIN students s ON r.student_id = s.id
+       JOIN courses c ON r.course_id = c.id
+       WHERE r.course_id = ANY($1::int[])
+       ORDER BY r.created_at DESC`,
+      [courseIds.split(",").map(Number)]
+    );
+    res.status(200).json(result.rows);
+  } catch (err) {
+    console.error("Error fetching reviews:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+};
 
+const getInstructorEarnings = async (req, res) => {
+  const { instructorId } = req.params;
+  try {
+    const result = await pool.query(
+      `SELECT c.id AS course_id, c.title AS course_title, c.price,
+              COUNT(e.student_id) AS student_count,
+              (c.price * COUNT(e.student_id)) AS total_revenue
+       FROM courses c
+       LEFT JOIN enrollments e ON c.id = e.course_id
+       WHERE c.instructor_id = $1
+       GROUP BY c.id, c.title, c.price
+       ORDER BY c.title`,
+      [instructorId]
+    );
+    res.status(200).json(result.rows);
+  } catch (err) {
+    console.error("Error fetching instructor earnings:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+};
 
 module.exports = {
   getAllCourses,
   searchCourses,
+  getCourseDetails,
   deleteCourse, // Add deleteCourse here
   addReview,
-  getCourseReviews
+  getCourseReviews,
+  getInstructorReviews,
+  getInstructorEarnings
 };

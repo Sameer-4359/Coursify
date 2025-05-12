@@ -68,6 +68,7 @@ function Login() {
           // Navigate to the appropriate dashboard based on the user's role
           if (data.user.role === 'Instructor') {
             navigate("/instructordashboard");
+            localStorage.setItem("instructorId", data.user.id);
           } else if (data.user.role === 'Student') {
             navigate("/studentDashboard");
           }
