@@ -20,9 +20,25 @@ const CourseDetails = () => {
   const [userRole, setUserRole] = useState(""); // Get role from auth context
   const [notes, setNotes] = useState({});
   const [editingLessonId, setEditingLessonId] = useState(null);
+  const [expandedModules, setExpandedModules] = useState({});
+  const [expandedLessons, setExpandedLessons] = useState({});
 
-  
   const role = localStorage.getItem("role"); // Fetch the role from localStorage or API
+
+
+  const toggleModule = (moduleId) => {
+    setExpandedModules(prev => ({
+      ...prev,
+      [moduleId]: !prev[moduleId],
+    }));
+  };
+
+  const toggleLesson = (lessonId) => {
+    setExpandedLessons(prev => ({
+      ...prev,
+      [lessonId]: !prev[lessonId],
+    }));
+  };
 
   // Add course to cart
   const handleAddCourse = async (courseId) => {
@@ -310,103 +326,93 @@ const saveNote = async (lessonId) => {
 
   {/* Curriculum Section */}
   <div className="course-curriculum">
-    <h2>Curriculum </h2>
-    {course.modules?.length > 0 ? (
-      course.modules.map((module) => (
-        <div key={module.id} className="module">
-          <h3 className="module-title">
-            {role === "Student" && isEnrolled && (
-              <input
-                type="checkbox"
-                checked={isModuleCompleted(module)}
-                readOnly
-              />
-            )}
-            {module.title}
-          </h3>
-          <ul>
+  <h2>Curriculum</h2>
+  {course.modules?.length > 0 ? (
+    course.modules.map((module) => (
+      <div key={module.id} className="module">
+        <h3 className="module-title" onClick={() => toggleModule(module.id)}>
+          <span>{expandedModules[module.id] ? "▼" : "▶"}</span>
+          {" "}
+          {module.title}
+        </h3>
+
+        {expandedModules[module.id] && (
+          <ul className="lessons-list">
             {module.lessons.map((lesson, index) => (
               <li key={index} className="course-lesson">
-                <label>
-                  {role === "Student" && isEnrolled && (
-                    <input
-                      type="checkbox"
-                      checked={completedLessons[module.id]?.includes(index)}
-                      onChange={() => toggleLessonCompletion(module.id, index)}
-                    />
-                  )}
+                <div className="lesson-title" onClick={() => toggleLesson(lesson.id)}>
+                  <span>{expandedLessons[lesson.id] ? "▼" : "▶"}</span>
+                  {" "}
                   {lesson.title}
-                  {isEnrolled}
-                </label>
+                </div>
 
-                {/* Video Section */}
-                {(isEnrolled || role === "Instructor") && lesson.video_url && (
-                  <video controls width="600">
-                    <source src={lesson.video_url} type="video/mp4" />
-                    Your browser does not support the video tag.
-                  </video>
-                )}
+                {expandedLessons[lesson.id] && (
+                  <div className="lesson-details">
+                    {/* Video Section */}
+                    {(isEnrolled || role === "Instructor") && lesson.video_url && (
+                      <video controls width="600">
+                        <source src={lesson.video_url} type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
+                    )}
 
-                {/* Assignment PDF Section */}
-                {(isEnrolled || role === "Instructor") && lesson.assignment_url && (
-                  <div>
-                    <h4>Assignment Preview:</h4>
-                    <iframe
-                      src={`https://docs.google.com/gview?url=${encodeURIComponent(lesson.assignment_url)}&embedded=true`}
-                      width="100%"
-                      height="300px"
-                      frameBorder="0"
-                      title="PDF Preview"
-                    ></iframe>
-                    <div style={{ marginTop: "10px" }}>
-                      {(() => {
-                        const downloadUrl = lesson.assignment_url.includes("/upload/")
-                          ? lesson.assignment_url.replace("/upload/", "/upload/fl_attachment/")
-                          : lesson.assignment_url;
-                        return (
-                          <a href={downloadUrl} target="_blank" rel="noopener noreferrer">
-                            📥 Download Assignment PDF
-                          </a>
-                        );
-                      })()}
-                    </div>
-                  </div>
-                )}
-
-                {/* ✅ Notes Section */}
-                {(isEnrolled && role === "Student") && (
-                  <div className="lesson-notes" style={{ marginTop: "1rem" }}>
-                    <h4>📝 Notes:</h4>
-                    {editingLessonId === lesson.id ? (
-                      <>
-                        <textarea
-                          rows="4"
-                          value={notes[lesson.id] || ""}
-                          onChange={(e) =>
-                            setNotes({ ...notes, [lesson.id]: e.target.value })
-                          }
-                          style={{ width: "100%" }}
-                        />
-                        <div style={{ marginTop: "0.5rem" }}>
-                         <button onClick={() => saveNote(lesson.id)}>Save</button>
-
-                          <button
-                            style={{ marginLeft: "0.5rem" }}
-                            onClick={() => {
-                              setNotes({ ...notes, [lesson.id]: "" });
-                              setEditingLessonId(null);
-                            }}
-                          >
-                            Clear
-                          </button>
-                        </div>
-                      </>
-                    ) : (
+                    {/* Assignment PDF Section */}
+                    {(isEnrolled || role === "Instructor") && lesson.assignment_url && (
                       <div>
-                        <p style={{ whiteSpace: "pre-wrap" }}>{notes[lesson.id]}</p>
-                        <button onClick={() => setEditingLessonId(lesson.id)}>
-                          {notes[lesson.id] ? "Edit Notes" : "Add Notes"}
-                        </button>
+                        <h4>Assignment Preview:</h4>
+                        <iframe
+                          src={`https://docs.google.com/gview?url=${encodeURIComponent(lesson.assignment_url)}&embedded=true`}
+                          width="100%"
+                          height="300px"
+                          frameBorder="0"
+                          title="PDF Preview"
+                        ></iframe>
+                        <a
+                          href={lesson.assignment_url.replace("/upload/", "/upload/fl_attachment/")}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ display: "block", marginTop: "10px" }}
+                        >
+                          📥 Download Assignment PDF
+                        </a>
+                      </div>
+                    )}
+
+                    {/* Notes Section */}
+                    {(isEnrolled && role === "Student") && (
+                      <div className="lesson-notes" style={{ marginTop: "1rem" }}>
+                        <h4>📝 Notes:</h4>
+                        {editingLessonId === lesson.id ? (
+                          <>
+                            <textarea
+                              rows="4"
+                              value={notes[lesson.id] || ""}
+                              onChange={(e) =>
+                                setNotes({ ...notes, [lesson.id]: e.target.value })
+                              }
+                              style={{ width: "100%" }}
+                            />
+                            <div style={{ marginTop: "0.5rem" }}>
+                              <button onClick={() => saveNote(lesson.id)}>Save</button>
+                              <button
+                                style={{ marginLeft: "0.5rem" }}
+                                onClick={() => {
+                                  setNotes({ ...notes, [lesson.id]: "" });
+                                  setEditingLessonId(null);
+                                }}
+                              >
+                                Clear
+                              </button>
+                            </div>
+                          </>
+                        ) : (
+                          <div>
+                            <p style={{ whiteSpace: "pre-wrap" }}>{notes[lesson.id]}</p>
+                            <button onClick={() => setEditingLessonId(lesson.id)}>
+                              {notes[lesson.id] ? "Edit Notes" : "Add Notes"}
+                            </button>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
@@ -414,12 +420,14 @@ const saveNote = async (lessonId) => {
               </li>
             ))}
           </ul>
-        </div>
-      ))
-    ) : ( 
-      <p>No modules available.</p>
-    )}
-  </div>
+        )}
+      </div>
+    ))
+  ) : (
+    <p>No modules available.</p>
+  )}
+</div>
+
 
 
 

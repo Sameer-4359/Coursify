@@ -111,7 +111,7 @@ function Menu() {
                 <Button onClick={handleLogout} className="authButton">
                   Logout
                 </Button>
-                {role === "Student" && location.pathname.toLowerCase() === "/studentdashboard" && (
+                {role === "Student"  && (
                   <Button onClick={handleViewCart} className="authButton">
                     <FontAwesomeIcon icon={faShoppingCart} /> View Cart
                   </Button>

@@ -5,7 +5,7 @@ const getTotalCourses = async (req, res) => {
   try {
     const result = await pool.query("SELECT COUNT(*) FROM courses");
     const totalCourses = result.rows[0].count;
-    res.status(200).json({ totalCourses });
+    res.status(200).json({ totalCourses }); 
   } catch (error) {
     console.error("Error fetching total courses:", error);
     res.status(500).json({ message: "Server error" });

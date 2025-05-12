@@ -10,10 +10,10 @@
     text-align: center;
     padding: 3rem 1rem 2rem;
     /* background-color: #4f46e5; */
-    background-image: url('/public/images/welcome.png');
+    background-image: url('/public/images/welcome.jpg');
     background-size:cover;
     align-content: center;
-    color: white;
+    color: black;
     border-radius: 0 0 20px 20px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     margin-top: -72px;
@@ -29,7 +29,7 @@
   
   .dashboardWelcome p {
     font-size: 1.2rem;
-    color: #e0e7ff;
+    color: black;
   }
 
   @keyframes slideInLeft {
