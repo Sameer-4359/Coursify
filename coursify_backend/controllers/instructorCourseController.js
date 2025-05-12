@@ -581,3 +581,83 @@ exports.deleteCourse = async (req, res) => {
     res.status(500).json({ error: "Failed to delete course" });
   }
 };
+
+
+// Add these to your instructorCourseController.js
+
+// Get instructor reviews
+exports.getInstructorReviews = async (req, res) => {
+  const instructorId = req.params.instructorId;
+
+  try {
+    const result = await db.query(
+      `SELECT r.*, c.title AS course_title, s.username AS student_name
+       FROM reviews r
+       JOIN courses c ON r.course_id = c.id
+       JOIN students s ON r.student_id = s.id
+       WHERE c.instructor_id = $1
+       ORDER BY r.created_at DESC`,
+      [instructorId]
+    );
+
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.error("Error fetching reviews:", error);
+    res.status(500).json({ error: "Failed to fetch reviews" });
+  }
+};
+
+// Get instructor earnings
+exports.getInstructorEarnings = async (req, res) => {
+  const instructorId = req.params.instructorId;
+
+  try {
+    // Get total earnings
+    const earningsResult = await db.query(
+      `SELECT 
+         COALESCE(SUM(c.price * COUNT(e.id)), 0) AS total_earnings,
+         COALESCE(COUNT(DISTINCT e.student_id), 0) AS total_students,
+         COALESCE(COUNT(DISTINCT e.course_id), 0) AS total_courses
+       FROM enrollments e
+       JOIN courses c ON e.course_id = c.id
+       WHERE c.instructor_id = $1
+       GROUP BY c.instructor_id`,
+      [instructorId]
+    );
+
+    // Default values if no results
+    const earningsData = earningsResult.rowCount > 0 ? earningsResult.rows[0] : {
+      total_earnings: 0,
+      total_students: 0,
+      total_courses: 0
+    };
+
+    // Get earnings breakdown
+    const breakdownResult = await db.query(
+      `SELECT 
+         c.id,
+         c.title,
+         c.price,
+         COALESCE(COUNT(e.id), 0) AS enrollments_count,
+         COALESCE((c.price * COUNT(e.id)), 0) AS course_earnings
+       FROM courses c
+       LEFT JOIN enrollments e ON e.course_id = c.id
+       WHERE c.instructor_id = $1
+       GROUP BY c.id`,
+      [instructorId]
+    );
+
+    res.status(200).json({
+      totalEarnings: earningsData.total_earnings,
+      totalStudents: earningsData.total_students,
+      totalCourses: earningsData.total_courses,
+      breakdown: breakdownResult.rows
+    });
+  } catch (error) {
+    console.error("Error fetching earnings:", error);
+    res.status(500).json({ 
+      error: "Failed to fetch earnings",
+      details: error.message 
+    });
+  }
+};

@@ -186,9 +186,17 @@ function InstructorDashboard() {
     totalStudents: 0,
     totalEarnings: 0,
   });
+  const [reviews, setReviews] = useState([]);
+const [earnings, setEarnings] = useState({
+  totalEarnings: 0,
+  totalStudents: 0,
+  breakdown: []
+});
+const [activeSection, setActiveSection] = useState("dashboard");
 
   const navigate = useNavigate();
   const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   const handleSubmitFeedback = async (feedbackText) => {
     try {
@@ -232,8 +240,8 @@ function InstructorDashboard() {
         setSummary({
           totalCourses: data.length,
           averageRating: 4.5,
-          totalStudents: 100,
-          totalEarnings: 5000,
+          totalStudents: 2,
+          totalEarnings: 500,
         });
       } catch (error) {
         console.error("Fetch error:", error);
@@ -246,8 +254,81 @@ function InstructorDashboard() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+  if (activeSection === 'reviews') {
+    fetchReviews();
+  }
+}, [activeSection]);
+
+useEffect(() => {
+  if (activeSection === 'earnings') {
+    fetchEarnings();
+  }
+}, [activeSection]);
+
+const fetchReviews = async () => {
+  try {
+    const token = localStorage.getItem('token');
+    const instructorId = localStorage.getItem('instructorId');
+    
+    if (!instructorId) {
+      throw new Error("Instructor ID not found");
+    }
+
+    const response = await fetch(
+      `http://localhost:5000/api/instructor/${instructorId}/reviews`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    setReviews(data);
+  } catch (error) {
+    console.error('Error fetching reviews:', error);
+    // Optionally set some error state to show to user
+  }
+};
+
+const fetchEarnings = async () => {
+  try {
+    const token = localStorage.getItem('token');
+    const instructorId = localStorage.getItem('instructorId');
+    const response = await fetch(
+      `http://localhost:5000/api/instructor/${instructorId}/earnings`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    const data = await response.json();
+    
+    // Ensure the data has proper default values
+    setEarnings({
+      totalEarnings: data.totalEarnings || 0,
+      totalStudents: data.totalStudents || 0,
+      breakdown: data.breakdown || []
+    });
+  } catch (error) {
+    console.error('Error fetching earnings:', error);
+    // Set default values on error
+    setEarnings({
+      totalEarnings: 0,
+      totalStudents: 0,
+      breakdown: []
+    });
+  }
+};
+
   // const handleAddCourse = () => navigate("/addcourse");
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  
 
   const toggleSidebar = () => {
     setIsSidebarCollapsed(prev => !prev);
@@ -258,7 +339,7 @@ function InstructorDashboard() {
     navigate("/login");
   };
 
-  const [activeSection, setActiveSection] = useState("dashboard");
+  
 
   return (
     <div><Menu />
@@ -340,6 +421,68 @@ function InstructorDashboard() {
           </div>
         )}
 
+        {activeSection === "reviews" && (
+  <div className="reviewsSection">
+    <h2>Student Reviews</h2>
+    {reviews.length > 0 ? (
+      <div className="reviewsList">
+        {reviews.map((review) => (
+          <div key={review.id} className="reviewCard">
+            <div className="reviewHeader">
+              <h3>{review.course_title}</h3>
+              <div className="rating">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <span key={i} className={i < review.rating ? "filled" : ""}>
+                    ★
+                  </span>
+                ))}
+              </div>
+            </div>
+            <p className="reviewText">{review.review_text}</p>
+            <p className="reviewAuthor">- {review.student_name}</p>
+            <p className="reviewDate">
+              {new Date(review.created_at).toLocaleDateString()}
+            </p>
+          </div>
+        ))}
+      </div>
+    ) : (
+      <p>No reviews yet for your courses.</p>
+    )}
+  </div>
+)}
+
+{activeSection === "earnings" && (
+  <div className="earningsSection">
+    <h2>Your Earnings</h2>
+    <div className="earningsSummary">
+      <div className="summaryCard">
+        <h3>Total Earnings</h3>
+        <p>${(earnings?.totalEarnings || 0).toFixed(2)}</p>
+      </div>
+      <div className="summaryCard">
+        <h3>Total Students</h3>
+        <p>{earnings?.totalStudents || 0}</p>
+      </div>
+    </div>
+    
+    <h3>Earnings by Course</h3>
+    {earnings?.breakdown?.length > 0 ? (
+      <div className="earningsBreakdown">
+        {earnings.breakdown.map((course) => (
+          <div key={course.id} className="courseEarnings">
+            <h4>{course.title}</h4>
+            <p>Price: ${(course.price || 0).toFixed(2)}</p>
+            <p>Enrollments: {course.enrollments_count || 0}</p>
+            <p>Total Earnings: ${(course.course_earnings || 0).toFixed(2)}</p>
+          </div>
+        ))}
+      </div>
+    ) : (
+      <p>No earnings data available yet.</p>
+    )}
+  </div>
+)}
         {activeSection === "feedback" && (
           <div className="feedbackSection">
             <h2>Share Your Feedback</h2>

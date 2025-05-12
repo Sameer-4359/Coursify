@@ -63,8 +63,11 @@ function Login() {
           alert("Logged in as: " + data.user.role);
 
           if (data.user.role === "Student") {
-            localStorage.setItem("studentId", data.user.id); // Assuming the user ID is the student ID
-          }
+  localStorage.setItem("studentId", data.user.id);
+} else if (data.user.role === "Instructor") {
+  localStorage.setItem("instructorId", data.user.id);  // ✅ ADD THIS LINE
+}
+
           // Navigate to the appropriate dashboard based on the user's role
           if (data.user.role === 'Instructor') {
             navigate("/instructordashboard");
