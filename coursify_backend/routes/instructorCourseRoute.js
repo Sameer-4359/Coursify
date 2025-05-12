@@ -16,10 +16,14 @@ router.get('/:instructorId/courses', instructorCourseController.getCourses);
 router.post('/:instructorId/courses', instructorCourseController.addCourse);
 
 // Update a course
-router.put('/courses/:courseId', instructorCourseController.updateCourse);
+router.put('/courses/:courseId', instructorCourseController.updateCourse); 
 
 // Delete a course
 router.delete('/courses/:courseId', instructorCourseController.deleteCourse);
+
+// Add these to your instructor routes (router.js)
+router.get('/:instructorId/reviews', instructorCourseController.getInstructorReviews);
+router.get('/:instructorId/earnings', instructorCourseController.getInstructorEarnings);
 
 
 

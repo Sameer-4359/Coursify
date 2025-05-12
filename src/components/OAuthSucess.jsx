@@ -21,6 +21,7 @@ function OAuthSuccess() {
         localStorage.setItem("studentId", id);
         navigate("/studentDashboard");
       } else if (role === "Instructor") {
+        localStorage.setItem("instructorId", id);
         navigate("/instructordashboard");
       } else if (role === "Admin") {
         navigate("/adminDashboard");
